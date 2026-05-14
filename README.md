@@ -14,3 +14,16 @@ A Java quiz game inspired by the TV show *Who Wants to Be a Millionaire?* built 
 - Easy to add more questions and features
 
 ---
+
+## How the Game Works
+
+- The game loads questions from `QuestionBank.java`
+- Each question contains:
+  - Question text
+  - 4 answer choices
+  - Correct answer index
+- Players answer using buttons in the GUI
+- Correct answers increase the money score
+- Wrong answers end the game
+
+---
