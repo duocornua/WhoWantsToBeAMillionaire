@@ -1,11 +1,13 @@
+package com.mycompany.millionaire.ui;
 
-import model.Questions;
-import model.QuestionBank;
+
+import com.mycompany.millionaire.model.Question;
+import com.mycompany.millionaire.model.QuestionBank;
 import java.util.ArrayList;
 
 public class GameFrame extends javax.swing.JFrame {
 
-    private ArrayList<Questions> questions;
+    private ArrayList<Question> questions;
     private int currentQuestion = 0;
     private int money = 0;
 
@@ -22,7 +24,7 @@ public class GameFrame extends javax.swing.JFrame {
 
     private void loadQuestion() {
 
-        Questions q = questions.get(currentQuestion);
+        Question q = questions.get(currentQuestion);
 
         lblQuestion.setText(q.getQuestion());
 
@@ -199,7 +201,7 @@ public class GameFrame extends javax.swing.JFrame {
 
     private void checkAnswer(int answer) {
 
-        Questions q = questions.get(currentQuestion);
+        Question q = questions.get(currentQuestion);
 
         if (answer == q.getCorrectAnswer()) {
 

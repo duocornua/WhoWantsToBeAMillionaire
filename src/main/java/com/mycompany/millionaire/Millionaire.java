@@ -1,16 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
 package com.mycompany.millionaire;
+import com.mycompany.millionaire.ui.GameFrame;
 
-/**
- *
- * @author ROGStrix
- */
+
 public class Millionaire {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+
+        java.awt.EventQueue.invokeLater(() -> {
+            new GameFrame().setVisible(true);
+        });
+
     }
 }
