@@ -1,13 +1,14 @@
 package com.mycompany.millionaire;
-import com.mycompany.millionaire.ui.GameFrame;
 
+import com.mycompany.millionaire.ui.MainMenu;
 
 public class Millionaire {
 
     public static void main(String[] args) {
 
         java.awt.EventQueue.invokeLater(() -> {
-            new GameFrame().setVisible(true);
+            // Launch the main menu first
+            new MainMenu().setVisible(true);
         });
 
     }
