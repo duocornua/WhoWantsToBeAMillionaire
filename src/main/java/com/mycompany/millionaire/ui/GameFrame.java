@@ -1,9 +1,11 @@
 package com.mycompany.millionaire.ui;
 
-
 import com.mycompany.millionaire.model.Question;
 import com.mycompany.millionaire.model.QuestionBank;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import javax.swing.JButton;
 
 public class GameFrame extends javax.swing.JFrame {
 
@@ -34,6 +36,10 @@ public class GameFrame extends javax.swing.JFrame {
         btnD.setText(q.getOptions()[3]);
 
         lblMoney.setText("Money: $" + money);
+        btnA.setVisible(true);
+        btnB.setVisible(true);
+        btnC.setVisible(true);
+        btnD.setVisible(true);
     }
 
     @SuppressWarnings("unchecked")
@@ -49,6 +55,7 @@ public class GameFrame extends javax.swing.JFrame {
         lblMoney = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
+        btnHelp5050 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAutoRequestFocus(false);
@@ -99,8 +106,8 @@ public class GameFrame extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(717, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(714, Short.MAX_VALUE)
                 .addComponent(lblMoney)
                 .addGap(40, 40, 40))
         );
@@ -109,7 +116,7 @@ public class GameFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(lblMoney)
-                .addContainerGap(299, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -125,15 +132,28 @@ public class GameFrame extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(0, 0, 0));
 
+        btnHelp5050.setText("50/50");
+        btnHelp5050.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHelp5050ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 211, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnHelp5050, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(75, 75, 75)
+                .addComponent(btnHelp5050, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(211, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -199,6 +219,10 @@ public class GameFrame extends javax.swing.JFrame {
         checkAnswer(3);
     }//GEN-LAST:event_btnDActionPerformed
 
+    private void btnHelp5050ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHelp5050ActionPerformed
+        execute5050(btnHelp5050);
+    }//GEN-LAST:event_btnHelp5050ActionPerformed
+
     private void checkAnswer(int answer) {
 
         Question q = questions.get(currentQuestion);
@@ -224,6 +248,35 @@ public class GameFrame extends javax.swing.JFrame {
             btnC.setEnabled(false);
             btnD.setEnabled(false);
         }
+    }
+
+    private void execute5050(JButton btnHelp5050) {
+        Question q = questions.get(currentQuestion);
+        int correctIndex = q.getCorrectAnswer();
+
+        List<JButton> wrongButtons = new ArrayList<>();
+
+        if (correctIndex != 0) {
+            wrongButtons.add(btnA);
+        }
+        if (correctIndex != 1) {
+            wrongButtons.add(btnB);
+        }
+        if (correctIndex != 2) {
+            wrongButtons.add(btnC);
+        }
+        if (correctIndex != 3) {
+            wrongButtons.add(btnD);
+        }
+
+        Collections.shuffle(wrongButtons);
+
+        // Ẩn 2 nút sai đầu tiên
+        wrongButtons.get(0).setVisible(false);
+        wrongButtons.get(1).setVisible(false);
+
+        // Vô hiệu hóa nút 50/50 sau khi dùng
+        btnHelp5050.setEnabled(false);
     }
 
     /**
@@ -266,6 +319,7 @@ public class GameFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnB;
     private javax.swing.JButton btnC;
     private javax.swing.JButton btnD;
+    private javax.swing.JButton btnHelp5050;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
