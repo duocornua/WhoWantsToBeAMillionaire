@@ -8,6 +8,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineEvent;
 import javax.swing.SwingUtilities;
+import javax.sound.sampled.FloatControl;
 
 public class AudioPlayer {
 
@@ -22,8 +23,24 @@ public class AudioPlayer {
         stopEffect();
         loopClip = loadClip(fileName);
         if (loopClip != null) {
+            setVolume(loopClip, 0.5f);
             loopClip.loop(Clip.LOOP_CONTINUOUSLY);
             loopClip.start();
+        }
+    }
+    
+    private static void setVolume(Clip clip, float volume) {
+        try {
+            if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+                FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                volume = Math.max(0.0f, Math.min(1.0f, volume));
+                
+                float dB = (volume == 0.0f) ? gainControl.getMinimum() : (float) (Math.log(volume) / Math.log(10.0) * 20.0);
+                
+                gainControl.setValue(dB);
+            }
+        } catch (Exception e) {
+            System.err.println("Cannot adjust volume: " + e.getMessage());
         }
     }
 

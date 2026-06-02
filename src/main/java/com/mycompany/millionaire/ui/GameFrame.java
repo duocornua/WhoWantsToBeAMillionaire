@@ -59,6 +59,7 @@ public class GameFrame extends JFrame {
     private boolean helpUsed = false;
 
     public GameFrame() {
+        System.setProperty("sun.java2d.noddraw", "true");
         questions = QuestionBank.getQuestions();
         initComponents();
         loadQuestion();
@@ -113,15 +114,21 @@ public class GameFrame extends JFrame {
         questionLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         LogoPanel logoPanel = new LogoPanel();
-        logoPanel.setPreferredSize(new Dimension(720, 300));
+        logoPanel.setPreferredSize(new Dimension(720, 320));
+        logoPanel.setMinimumSize(new Dimension(500, 220));
 
         HexPanel questionBox = new HexPanel();
         questionBox.setLayout(new BorderLayout());
         questionBox.setPreferredSize(new Dimension(780, 92));
+        questionBox.setMinimumSize(new Dimension(700, 92));
         questionBox.add(questionLabel, BorderLayout.CENTER);
 
-        JPanel answerGrid = new JPanel(new GridLayout(2, 2, 24, 20));
+        // Đặt kích thước cố định vừa vặn cho khung lưới chứa đáp án tránh bị co giãn kéo dài
+        JPanel answerGrid = new JPanel(new GridLayout(2, 2, 30, 20));
         answerGrid.setOpaque(false);
+        answerGrid.setPreferredSize(new Dimension(780, 200));
+        answerGrid.setMinimumSize(new Dimension(700, 180));
+
         String[] labels = {"A:", "B:", "C:", "D:"};
         for (int i = 0; i < answerButtons.length; i++) {
             answerButtons[i] = new MillionaireButton(labels[i]);
@@ -131,20 +138,28 @@ public class GameFrame extends JFrame {
         }
 
         GridBagConstraints gbc = new GridBagConstraints();
+        
+        // ---- VẼ LOGO ----
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weightx = 1;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.insets = new Insets(0, 0, 50, 0);
+        gbc.weightx = 1.0;
+        gbc.weighty = 0.6; // Ưu tiên cấp nhiều không gian dọc cho Logo khi phóng to
+        gbc.fill = GridBagConstraints.BOTH; 
+        gbc.insets = new Insets(10, 0, 20, 0);
         questionArea.add(logoPanel, gbc);
 
+        // ---- VẼ KHUNG CÂU HỎI ----
         gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(0, 0, 20, 0);
+        gbc.weighty = 0.0; // Khóa không cho giãn tự do theo chiều dọc
+        gbc.fill = GridBagConstraints.HORIZONTAL; // Chỉ giãn ngang đều hai bên
+        gbc.insets = new Insets(0, 0, 25, 0);
         questionArea.add(questionBox, gbc);
 
+        // ---- VẼ GRID ĐÁP ÁN ----
         gbc.gridy = 2;
-        gbc.insets = new Insets(0, 0, 0, 0);
+        gbc.weighty = 0.0; // Khóa chiều cao cố định để giữ nút bấm chuẩn hình lục giác
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 0, 15, 0);
         questionArea.add(answerGrid, gbc);
 
         return questionArea;
@@ -178,6 +193,7 @@ public class GameFrame extends JFrame {
             answerButtons[i].setVisible(true);
             answerButtons[i].setEnabled(true);
             answerButtons[i].setBlinkColor(null);
+            answerButtons[i].setStaticReveal(false); // Reset lại trạng thái màu
         }
 
         statusLabel.setText("");
@@ -230,10 +246,17 @@ public class GameFrame extends JFrame {
         Timer timer = new Timer(250, null);
         timer.addActionListener(e -> {
             boolean visible = ((System.currentTimeMillis() - start) / 250) % 2 == 0;
-            correctButton.setBlinkColor(visible ? GREEN : null);
-            if (wrongButton != null) {
-                wrongButton.setBlinkColor(visible ? RED : null);
+
+            if (correctAnswer) {
+                correctButton.setBlinkColor(visible ? GREEN : null);
+            } else {
+                if (wrongButton != null) {
+                    wrongButton.setBlinkColor(GOLD);
+                    wrongButton.setStaticReveal(true); 
+                }
+                correctButton.setBlinkColor(visible ? GREEN : null);
             }
+
             moneyLadder.setBlinking(correctAnswer && visible);
 
             if (System.currentTimeMillis() - start >= 5000) {
@@ -241,6 +264,7 @@ public class GameFrame extends JFrame {
                 correctButton.setBlinkColor(null);
                 if (wrongButton != null) {
                     wrongButton.setBlinkColor(null);
+                    wrongButton.setStaticReveal(false);
                 }
                 moneyLadder.setBlinking(false);
                 afterBlink.run();
@@ -306,10 +330,13 @@ public class GameFrame extends JFrame {
     }
 
     private static class BackgroundPanel extends JPanel {
+
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
+            
             Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setPaint(new GradientPaint(0, 0, new Color(6, 10, 42), getWidth(), getHeight(), new Color(18, 32, 96)));
             g2.fillRect(0, 0, getWidth(), getHeight());
             g2.dispose();
@@ -317,6 +344,7 @@ public class GameFrame extends JFrame {
     }
 
     private static class HexPanel extends JPanel {
+
         HexPanel() {
             setOpaque(false);
         }
@@ -345,6 +373,7 @@ public class GameFrame extends JFrame {
     }
 
     private static class LogoPanel extends JPanel {
+
         private final Image logo = new ImageIcon("logo.png").getImage();
 
         LogoPanel() {
@@ -371,9 +400,11 @@ public class GameFrame extends JFrame {
     }
 
     private static class MillionaireButton extends JButton {
+
         private final String letter;
         private String answer = "";
         private Color blinkColor;
+        private boolean staticReveal = false;
 
         MillionaireButton(String letter) {
             this.letter = letter;
@@ -394,28 +425,57 @@ public class GameFrame extends JFrame {
             this.blinkColor = blinkColor;
             repaint();
         }
+        
+        void setStaticReveal(boolean staticReveal) {
+            this.staticReveal = staticReveal;
+            repaint();
+        }
 
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             Polygon shape = HexPanel.createHexShape(getWidth(), getHeight(), 38);
-            g2.setPaint(new GradientPaint(0, 0, ANSWER_BLUE_TOP, 0, getHeight(), ANSWER_BLUE_BOTTOM));
-            g2.fillPolygon(shape);
-            g2.setColor(blinkColor != null ? blinkColor : new Color(205, 210, 225));
-            g2.setStroke(new BasicStroke(blinkColor != null ? 4.5f : 2.2f));
+            
+            if (blinkColor != null) {
+                g2.setColor(blinkColor);
+                g2.fillPolygon(shape);
+            } else {
+                g2.setPaint(new GradientPaint(0, 0, ANSWER_BLUE_TOP, 0, getHeight(), ANSWER_BLUE_BOTTOM));
+                g2.fillPolygon(shape);
+            }
+            
+            if (staticReveal) {
+                g2.setColor(GOLD);
+                g2.setStroke(new BasicStroke(2.2f));
+            } else if (blinkColor == GREEN) {
+                g2.setColor(Color.WHITE); 
+                g2.setStroke(new BasicStroke(3.5f));
+            } else {
+                g2.setColor(new Color(205, 210, 225)); 
+                g2.setStroke(new BasicStroke(2.2f));
+            }
             g2.drawPolygon(shape);
-
+            
+            Color letterColor = GOLD; 
+            Color textColor = WHITE;
+            
+            // Ép cả 2 trường hợp: Đang nhấp nháy hiện nền Xanh (GREEN) hoặc câu sai đứng yên nền Vàng (staticReveal) đều chuyển chữ sang màu Đen
+            if (blinkColor == GREEN || staticReveal) {
+                letterColor = Color.BLACK;
+                textColor = Color.BLACK;
+            }
+            
             Font letterFont = getFont().deriveFont(Font.BOLD, 34f);
             g2.setFont(letterFont);
-            g2.setColor(GOLD);
+            g2.setColor(letterColor);
             FontMetrics letterMetrics = g2.getFontMetrics();
             int letterX = 52;
             int centerY = (getHeight() + letterMetrics.getAscent() - letterMetrics.getDescent()) / 2;
             g2.drawString(letter, letterX, centerY);
 
             g2.setFont(getFont());
-            g2.setColor(WHITE);
+            g2.setColor(textColor);
             drawFittedText(g2, answer, 142, centerY, getWidth() - 170);
             g2.dispose();
         }
@@ -433,6 +493,7 @@ public class GameFrame extends JFrame {
     }
 
     private static class MoneyLadderPanel extends JPanel {
+
         private int currentLevel = 1;
         private boolean blinking;
 
