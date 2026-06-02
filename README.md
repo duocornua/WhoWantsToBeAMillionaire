@@ -26,6 +26,12 @@ In this game, the player answers a sequence of multiple-choice questions and cli
 
 ---
 
+## 📷 Screenshots
+
+
+
+---
+
 ## 🕹️ How to Play
 
 Use your mouse to interact and select functions on the game screen.
