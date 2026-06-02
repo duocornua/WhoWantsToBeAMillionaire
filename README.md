@@ -79,4 +79,19 @@ The game consists of **3 main frames**:
 
 ---
 
-## 🗂️ Project Structure
+## 🚀 How to Run
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/duocornua/WhoWantsToBeAMillionaire.git
+   ```
+2. Open the project in **NetBeans IDE**.
+3. Build and run the project (`F6`).
+
+> **Requirements:** JDK 8+ and NetBeans IDE (or any Java-compatible IDE).
+
+---
+
+## 📄 License
+
+This project is developed for educational purposes as part of the CSD201 course at FPT University. All rights reserved by Group 6 — SE2001 SU26.
