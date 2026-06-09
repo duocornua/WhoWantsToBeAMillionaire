@@ -14,11 +14,15 @@ public class AudioPlayer {
 
     private static Clip loopClip;
     private static Clip effectClip;
+    private static boolean muted = false;
 
     private AudioPlayer() {
     }
 
     public static void playLoop(String fileName) {
+        if (muted) {
+            return;
+        }
         stopLoop();
         stopEffect();
         loopClip = loadClip(fileName);
@@ -45,6 +49,9 @@ public class AudioPlayer {
     }
 
     public static void playOnce(String fileName) {
+        if (muted) {
+            return;
+        }
         stopEffect();
         effectClip = loadClip(fileName);
         if (effectClip != null) {
@@ -53,6 +60,10 @@ public class AudioPlayer {
     }
 
     public static void playOnceThen(String fileName, Runnable afterAudio) {
+        if (muted) {
+            SwingUtilities.invokeLater(afterAudio);
+            return;
+        }
         stopEffect();
         effectClip = loadClip(fileName);
         if (effectClip == null) {
@@ -88,6 +99,22 @@ public class AudioPlayer {
     public static void stopAll() {
         stopLoop();
         stopEffect();
+    }
+
+    public static boolean isMuted() {
+        return muted;
+    }
+
+    public static void setMuted(boolean muted) {
+        AudioPlayer.muted = muted;
+        if (muted) {
+            stopAll();
+        }
+    }
+
+    public static boolean toggleMuted() {
+        setMuted(!muted);
+        return muted;
     }
 
     private static Clip loadClip(String fileName) {

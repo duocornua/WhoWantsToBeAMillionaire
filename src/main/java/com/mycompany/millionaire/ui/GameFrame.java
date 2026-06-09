@@ -52,6 +52,7 @@ public class GameFrame extends JFrame {
     private final MoneyLadderPanel moneyLadder = new MoneyLadderPanel();
     private final JButton helpButton = createControlButton("50:50");
     private final JButton quitButton = createControlButton("QUIT");
+    private final JButton muteButton = createSoundButton();
     private final JLabel statusLabel = new JLabel("", SwingConstants.CENTER);
 
     private int currentQuestion = 0;
@@ -84,10 +85,16 @@ public class GameFrame extends JFrame {
         statusLabel.setPreferredSize(new Dimension(100, 62));
         topPanel.add(statusLabel, BorderLayout.NORTH);
 
-        JPanel controls = new JPanel(new GridLayout(1, 2, 12, 0));
+        JPanel controls = new JPanel(new GridBagLayout());
         controls.setOpaque(false);
-        controls.add(helpButton);
-        controls.add(quitButton);
+        GridBagConstraints controlGbc = new GridBagConstraints();
+        controlGbc.gridy = 0;
+        controlGbc.insets = new Insets(0, 0, 0, 12);
+        controls.add(muteButton, controlGbc);
+        controlGbc.insets = new Insets(0, 0, 0, 12);
+        controls.add(helpButton, controlGbc);
+        controlGbc.insets = new Insets(0, 0, 0, 0);
+        controls.add(quitButton, controlGbc);
         topPanel.add(controls, BorderLayout.EAST);
         content.add(topPanel, BorderLayout.NORTH);
 
@@ -99,6 +106,7 @@ public class GameFrame extends JFrame {
 
         helpButton.addActionListener(e -> execute5050());
         quitButton.addActionListener(e -> returnToMenu());
+        muteButton.addActionListener(e -> toggleMute());
 
         pack();
         setLocationRelativeTo(null);
@@ -174,6 +182,23 @@ public class GameFrame extends JFrame {
         button.setFocusPainted(false);
         button.setPreferredSize(new Dimension(120, 48));
         return button;
+    }
+
+    private JButton createSoundButton() {
+        JButton button = new MainMenu.SoundToggleButton();
+        button.setBackground(PANEL_BLUE);
+        button.setForeground(GOLD);
+        button.setToolTipText("Mute or unmute all game audio");
+        button.setPreferredSize(new Dimension(48, 48));
+        return button;
+    }
+
+    private void toggleMute() {
+        AudioPlayer.toggleMuted();
+        muteButton.repaint();
+        if (!AudioPlayer.isMuted() && !waitingForAnimation) {
+            AudioPlayer.playLoop(getQuestionLoopFile());
+        }
     }
 
     private void loadQuestion() {
