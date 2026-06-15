@@ -58,13 +58,57 @@ Use your mouse to interact and select functions on the game screen.
 
 ---
 
-## 🖼️ Frame Interfaces
+## Data Structures and Algorithms
 
-The game consists of **3 main frames**:
+The project is organized so the DSA part is visible in the source code instead of being hidden inside the Swing frame.
+| Structure / Algorithm | File | Purpose |
+|---|---|---|
+| `ArrayList` | `QuestionPool`, `MoneyLadder` | Stores question lists and prize levels. |
+| `EnumMap` | `QuestionPool` | Groups questions by difficulty: Easy, Medium, Hard, Extra Hard. |
+| `Collections.shuffle()` | `QuestionPool`, `LifelineManager` | Randomizes question selection and 50/50 answer removal. |
+| `Queue` | `QuestionQueue` | Stores the selected 15 questions in the order the player will receive them. |
+| `Stack` | `GameHistoryStack` | Saves answered rounds so the game has a history of player choices. |
+| Linear search | `LifelineManager` | Finds wrong answers before hiding two of them. |
 
-1. **Main Menu** — Contains Play Game, About, Exit functions, and menu background music.
-2. **About** — Project introduction, team member information, gameplay guide, rules, interface summary, and tech stack.
-3. **Gameplay** — Question display, four answer buttons, 50/50 lifeline button, Quit button, money ladder, logo display, and gameplay audio.
+The main game flow is handled by `GameController`. The UI asks the controller for the current question, submits answers, and updates the screen based on the returned result.
+
+---
+
+## Project Structure
+
+```text
+src/main/java/com/mycompany/millionaire
+|-- Millionaire.java
+|-- dsa
+|   |-- GameHistoryStack.java
+|   |-- LifelineManager.java
+|   |-- MoneyLadder.java
+|   |-- QuestionPool.java
+|   `-- QuestionQueue.java
+|-- model
+|   |-- GameRound.java
+|   |-- PrizeLevel.java
+|   |-- Question.java
+|   |-- QuestionBank.java
+|   `-- QuestionLevel.java
+|-- service
+|   |-- AnswerResult.java
+|   `-- GameController.java
+`-- ui
+    |-- AudioPlayer.java
+    |-- GameFrame.java
+    |-- MainMenu.java
+    `-- component
+        |-- BackgroundPanel.java
+        |-- CircleButton.java
+        |-- HexPanel.java
+        |-- LogoPanel.java
+        |-- MenuBackgroundPanel.java
+        |-- MillionaireButton.java
+        |-- MoneyLadderPanel.java
+        |-- SoundToggleButton.java
+        `-- UiTheme.java
+```
 
 ---
 
