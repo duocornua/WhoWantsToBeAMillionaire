@@ -28,7 +28,10 @@ In this game, the player answers a sequence of multiple-choice questions and cli
 
 ## 📷 Screenshots
 
-
+| | |
+|---|---|
+| ![1](https://github.com/user-attachments/assets/51de7d80-a3c1-4f85-a366-44efb8cad2fd) | ![2](https://github.com/user-attachments/assets/bb9cb0f4-73d0-4b75-80cf-b7fdd0c7f5da) |
+| ![3](https://github.com/user-attachments/assets/684fb948-accf-4a9e-90a7-52e2e667e434) | ![4](https://github.com/user-attachments/assets/08d9eb87-31c8-4acc-96e7-06770bd97979) |
 
 ---
 
