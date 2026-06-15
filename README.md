@@ -2,7 +2,8 @@
 
 > **FPT University** | SE2001 – SU26 – CSD201  
 > **Group 6** | Java Swing Desktop Game
-
+> 
+> **Mentor** : Lê Thị Thu Lan
 ---
 
 ## 👥 Group Members
@@ -14,7 +15,6 @@
 | CE201357 | Lê Thuận Thành | Member |
 | CE180887 | Nguyễn Thế Vinh | Member |
 | CE181696 | Trương Minh Vỹ | Member |
-| — | Lê Thị Thu Lan | Mentor |
 
 ---
 
