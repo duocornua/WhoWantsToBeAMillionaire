@@ -1,26 +1,23 @@
 package com.mycompany.millionaire.ui;
 
-import java.awt.BasicStroke;
+import com.mycompany.millionaire.ui.component.CircleButton;
+import com.mycompany.millionaire.ui.component.MenuBackgroundPanel;
+import com.mycompany.millionaire.ui.component.SoundToggleButton;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Point;
-import java.awt.RenderingHints;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JComponent;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -50,27 +47,7 @@ public class MainMenu extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel backgroundPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Image image = new ImageIcon("MainMenu.png").getImage();
-
-                int pWidth = getWidth();
-                int pHeight = getHeight();
-                int iWidth = image.getWidth(this);
-                int iHeight = image.getHeight(this);
-
-                if (iWidth > 0 && iHeight > 0) {
-                    double scale = Math.max((double) pWidth / iWidth, (double) pHeight / iHeight);
-                    int drawWidth = (int) (iWidth * scale);
-                    int drawHeight = (int) (iHeight * scale);
-                    int x = (pWidth - drawWidth) / 2;
-                    int y = (pHeight - drawHeight) / 2;
-                    g.drawImage(image, x, y, drawWidth, drawHeight, this);
-                }
-            }
-        };
+        JPanel backgroundPanel = new MenuBackgroundPanel();
         backgroundPanel.setLayout(new GridBagLayout());
         setContentPane(backgroundPanel);
 
@@ -240,6 +217,8 @@ public class MainMenu extends JFrame {
                 + "2. About - Project information, group members, rules, and tech stack.\n"
                 + "3. Gameplay - Question area, answer buttons, 50/50, Quit, money ladder, logo, and game audio."));
         content.add(Box.createVerticalStrut(12));
+        content.add(createDsaCard());
+        content.add(Box.createVerticalStrut(12));
         content.add(createTechCard());
 
         JScrollPane scrollPane = new JScrollPane(content);
@@ -316,10 +295,24 @@ public class MainMenu extends JFrame {
             {"Language", "Java"},
             {"UI Framework", "Java Swing"},
             {"Build Tool", "Maven / NetBeans-compatible project structure"},
-            {"Data Structure Course", "CSD201"}
+            {"Course Focus", "Data Structures and Algorithms"},
+            {"Main DSA Packages", "model, dsa, service"}
         };
         JPanel card = createInfoCard("Tech Stack", "");
         card.add(createStyledTable(tech, new String[]{"Component", "Technology"}), BorderLayout.CENTER);
+        return card;
+    }
+
+    private JPanel createDsaCard() {
+        String[][] rows = {
+            {"ArrayList", "Stores question pools and the 15-level prize ladder"},
+            {"EnumMap", "Groups questions by difficulty level"},
+            {"Queue", "Keeps the selected questions in play order"},
+            {"Stack", "Stores answered rounds for game history"},
+            {"Shuffle", "Randomizes question choice and 50/50 removal"}
+        };
+        JPanel card = createInfoCard("DSA Used In Game", "");
+        card.add(createStyledTable(rows, new String[]{"Structure", "Where It Is Used"}), BorderLayout.CENTER);
         return card;
     }
 
@@ -352,85 +345,5 @@ public class MainMenu extends JFrame {
         scrollPane.getVerticalScrollBar().setBlockIncrement(48);
         scrollPane.getHorizontalScrollBar().setUnitIncrement(12);
         scrollPane.getViewport().putClientProperty("EnableWindowBlit", Boolean.TRUE);
-    }
-
-    private static class CircleButton extends JButton {
-        CircleButton(String text) {
-            super(text);
-            setPreferredSize(new Dimension(48, 48));
-            setContentAreaFilled(false);
-            setBorderPainted(false);
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setColor(getBackground());
-            g2.fillOval(2, 2, getWidth() - 4, getHeight() - 4);
-            g2.setColor(GOLD);
-            g2.setStroke(new BasicStroke(2.2f));
-            g2.drawOval(2, 2, getWidth() - 5, getHeight() - 5);
-            g2.dispose();
-            super.paintComponent(g);
-        }
-
-        @Override
-        protected void paintBorder(Graphics g) {
-        }
-    }
-
-    public static class SoundToggleButton extends JButton {
-        public SoundToggleButton() {
-            setPreferredSize(new Dimension(48, 48));
-            setContentAreaFilled(false);
-            setBorderPainted(false);
-            setFocusPainted(false);
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            int size = Math.min(getWidth(), getHeight()) - 4;
-            int left = (getWidth() - size) / 2;
-            int top = (getHeight() - size) / 2;
-            int cx = getWidth() / 2;
-            int cy = getHeight() / 2;
-            double scale = size / 48.0;
-
-            g2.setColor(getBackground());
-            g2.fillOval(left, top, size, size);
-            g2.setColor(GOLD);
-            g2.setStroke(new BasicStroke(2.2f));
-            g2.drawOval(left, top, size - 1, size - 1);
-
-            int[] speakerX = {
-                cx - (int) (12 * scale), cx - (int) (6 * scale), cx + (int) (2 * scale),
-                cx + (int) (2 * scale), cx - (int) (6 * scale), cx - (int) (12 * scale)
-            };
-            int[] speakerY = {
-                cy - (int) (6 * scale), cy - (int) (6 * scale), cy - (int) (12 * scale),
-                cy + (int) (12 * scale), cy + (int) (6 * scale), cy + (int) (6 * scale)
-            };
-            g2.fillPolygon(speakerX, speakerY, speakerX.length);
-
-            if (AudioPlayer.isMuted()) {
-                g2.setStroke(new BasicStroke((float) (2.4 * scale)));
-                g2.drawLine(cx + (int) (8 * scale), cy - (int) (8 * scale), cx + (int) (18 * scale), cy + (int) (8 * scale));
-                g2.drawLine(cx + (int) (18 * scale), cy - (int) (8 * scale), cx + (int) (8 * scale), cy + (int) (8 * scale));
-            } else {
-                g2.setStroke(new BasicStroke((float) (2.0 * scale)));
-                g2.drawArc(cx + (int) (4 * scale), cy - (int) (10 * scale), (int) (12 * scale), (int) (20 * scale), -42, 84);
-                g2.drawArc(cx + (int) (8 * scale), cy - (int) (14 * scale), (int) (16 * scale), (int) (28 * scale), -42, 84);
-            }
-
-            g2.dispose();
-        }
-
-        @Override
-        protected void paintBorder(Graphics g) {
-        }
     }
 }

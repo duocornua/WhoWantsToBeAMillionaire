@@ -32,15 +32,15 @@ public class AudioPlayer {
             loopClip.start();
         }
     }
-    
+
     private static void setVolume(Clip clip, float volume) {
         try {
             if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
                 FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
                 volume = Math.max(0.0f, Math.min(1.0f, volume));
-                
+
                 float dB = (volume == 0.0f) ? gainControl.getMinimum() : (float) (Math.log(volume) / Math.log(10.0) * 20.0);
-                
+
                 gainControl.setValue(dB);
             }
         } catch (Exception e) {
