@@ -1,24 +1,34 @@
 package com.mycompany.millionaire.model;
 
+import com.mycompany.millionaire.dsa.QuestionPool;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class QuestionBank {
 
     public static ArrayList<Question> getQuestions() {
+        QuestionPool pool = createQuestionPool();
         ArrayList<Question> gameQuestions = new ArrayList<>();
-        gameQuestions.addAll(pickQuestions(easyQuestions(), 5));
-        gameQuestions.addAll(pickQuestions(mediumQuestions(), 5));
-        gameQuestions.addAll(pickQuestions(hardQuestions(), 4));
-        gameQuestions.addAll(pickQuestions(extraHardQuestions(), 1));
+        gameQuestions.addAll(pool.pickRandom(QuestionLevel.EASY, 5));
+        gameQuestions.addAll(pool.pickRandom(QuestionLevel.MEDIUM, 5));
+        gameQuestions.addAll(pool.pickRandom(QuestionLevel.HARD, 4));
+        gameQuestions.addAll(pool.pickRandom(QuestionLevel.EXTRA_HARD, 1));
         return gameQuestions;
     }
 
-    private static List<Question> pickQuestions(List<Question> questions, int count) {
-        ArrayList<Question> copy = new ArrayList<>(questions);
-        Collections.shuffle(copy);
-        return copy.subList(0, Math.min(count, copy.size()));
+    private static QuestionPool createQuestionPool() {
+        QuestionPool pool = new QuestionPool();
+        addQuestions(pool, QuestionLevel.EASY, easyQuestions());
+        addQuestions(pool, QuestionLevel.MEDIUM, mediumQuestions());
+        addQuestions(pool, QuestionLevel.HARD, hardQuestions());
+        addQuestions(pool, QuestionLevel.EXTRA_HARD, extraHardQuestions());
+        return pool;
+    }
+
+    private static void addQuestions(QuestionPool pool, QuestionLevel level, List<Question> questions) {
+        for (Question question : questions) {
+            pool.add(level, question);
+        }
     }
 
     private static List<Question> easyQuestions() {
