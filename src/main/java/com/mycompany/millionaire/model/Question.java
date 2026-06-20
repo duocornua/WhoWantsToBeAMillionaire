@@ -1,26 +1,38 @@
 package com.mycompany.millionaire.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Question {
 
-    private String question;
-    private String[] options;
-    private int correctAnswer;
+    private final String questionText;
+    private final List<Answer> answers;
 
-    public Question(String question, String[] options, int correctAnswer) {
-        this.question = question;
-        this.options = options;
-        this.correctAnswer = correctAnswer;
+    public Question(String questionText, String correctInfo, String wrong1, String wrong2, String wrong3) {
+        this.questionText = questionText;
+        this.answers = new ArrayList<>();
+        
+        this.answers.add(new Answer(correctInfo, true));
+        this.answers.add(new Answer(wrong1));
+        this.answers.add(new Answer(wrong2));
+        this.answers.add(new Answer(wrong3));
+        
+        Collections.shuffle(this.answers);
     }
 
     public String getQuestion() {
-        return question;
+        return questionText;
     }
 
-    public String[] getOptions() {
-        return options;
+    public List<Answer> getAnswers() {
+        return answers;
     }
 
-    public int getCorrectAnswer() {
-        return correctAnswer;
+    public boolean isAnswerCorrect(int selectedIndex) {
+        if (selectedIndex >= 0 && selectedIndex < answers.size()) {
+            return answers.get(selectedIndex).isCorrect();
+        }
+        return false;
     }
 }

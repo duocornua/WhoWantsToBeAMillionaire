@@ -1,5 +1,6 @@
 package com.mycompany.millionaire.ui;
 
+import com.mycompany.millionaire.model.Answer; // IMPORT THÊM ĐỐI TƯỢNG ANSWER
 import com.mycompany.millionaire.model.Question;
 import com.mycompany.millionaire.service.AnswerResult;
 import com.mycompany.millionaire.service.GameController;
@@ -124,7 +125,14 @@ public class GameFrame extends JFrame {
         for (int i = 0; i < answerButtons.length; i++) {
             answerButtons[i] = new MillionaireButton(letters[i]);
             final int answerIndex = i;
-            answerButtons[i].addActionListener(e -> checkAnswer(answerIndex));
+            // SỬA TẠI ĐÂY: Khi click nút, lấy đúng đối tượng Answer tương ứng vị trí nút đó để check
+            answerButtons[i].addActionListener(e -> {
+                Question currentQuestion = gameController.getCurrentQuestion();
+                if (currentQuestion != null) {
+                    Answer selectedAnswer = currentQuestion.getAnswers().get(answerIndex);
+                    checkAnswer(selectedAnswer, answerIndex);
+                }
+            });
             answerGrid.add(answerButtons[i]);
         }
 
@@ -178,8 +186,11 @@ public class GameFrame extends JFrame {
         }
 
         questionLabel.setText("<html><div style='text-align:center;'>" + question.getQuestion() + "</div></html>");
+        
+        // SỬA TẠI ĐÂY: Lấy list đối tượng Answer ra để set chữ lên nút bấm
+        List<Answer> answers = question.getAnswers();
         for (int i = 0; i < answerButtons.length; i++) {
-            answerButtons[i].setAnswerText(question.getOptions()[i]);
+            answerButtons[i].setAnswerText(answers.get(i).getInfo());
             answerButtons[i].setVisible(true);
             answerButtons[i].setEnabled(true);
             answerButtons[i].setBlinkColor(null);
@@ -193,16 +204,18 @@ public class GameFrame extends JFrame {
         AudioPlayer.playLoop(gameController.getQuestionLoopFile());
     }
 
-    private void checkAnswer(int selectedAnswer) {
-        if (waitingForAnimation || !answerButtons[selectedAnswer].isVisible()) {
+    // SỬA TẠI ĐÂY: Hàm check nhận vào cả đối tượng Answer và vị trí index để xử lý hiệu ứng nhấp nháy
+    private void checkAnswer(Answer selectedAnswer, int buttonIndex) {
+        if (waitingForAnimation || !answerButtons[buttonIndex].isVisible()) {
             return;
         }
 
         waitingForAnimation = true;
         setAnswerButtonsEnabled(false);
 
+        // Gửi đối tượng Answer sang Controller xử lý
         AnswerResult result = gameController.submitAnswer(selectedAnswer);
-        MillionaireButton chosenButton = answerButtons[selectedAnswer];
+        MillionaireButton chosenButton = answerButtons[buttonIndex];
         MillionaireButton correctButton = answerButtons[result.getCorrectAnswer()];
 
         AudioPlayer.stopLoop();
