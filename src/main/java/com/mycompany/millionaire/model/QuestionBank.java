@@ -33,7 +33,7 @@ public class QuestionBank {
 
     private static List<Question> easyQuestions() {
         ArrayList<Question> list = new ArrayList<>();
-        // Cấu trúc mới: ("Câu hỏi", "ĐÁP ÁN ĐÚNG", "Đáp án sai 1", "Đáp án sai 2", "Đáp án sai 3")
+        // "Question", "CORRECT ANSWER", "Incorrect Answer 1", "Incorrect Answer 2", "Incorrect Answer 3"
         list.add(new Question("What is the capital of France?", "Paris", "London", "Rome", "Berlin"));
         list.add(new Question("How many days are there in a week?", "7", "5", "6", "8"));
         list.add(new Question("Which planet is known as the Red Planet?", "Mars", "Venus", "Earth", "Jupiter"));
