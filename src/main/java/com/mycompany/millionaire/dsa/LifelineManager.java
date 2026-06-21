@@ -28,7 +28,7 @@ public class LifelineManager {
         Collections.shuffle(wrongAnswers);
         used = true;
         
-        // Trả về 2 vị trí đáp án sai để giao diện tiến hành ẩn đi
+        // Return the two incorrect answer positions so the interface can hide them.
         return wrongAnswers.subList(0, Math.min(2, wrongAnswers.size()));
     }
 
