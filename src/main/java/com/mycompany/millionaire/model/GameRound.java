@@ -4,14 +4,12 @@ public class GameRound {
 
     private final int level;
     private final Question question;
-    private final int selectedAnswer;
-    private final boolean correct;
+    private final Answer selectedAnswer;
 
-    public GameRound(int level, Question question, int selectedAnswer, boolean correct) {
+    public GameRound(int level, Question question, Answer selectedAnswer) {
         this.level = level;
         this.question = question;
         this.selectedAnswer = selectedAnswer;
-        this.correct = correct;
     }
 
     public int getLevel() {
@@ -22,11 +20,11 @@ public class GameRound {
         return question;
     }
 
-    public int getSelectedAnswer() {
+    public Answer getSelectedAnswer() {
         return selectedAnswer;
     }
 
     public boolean isCorrect() {
-        return correct;
+        return selectedAnswer != null && selectedAnswer.isCorrect();
     }
 }

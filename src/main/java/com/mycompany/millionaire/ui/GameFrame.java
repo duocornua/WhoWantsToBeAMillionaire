@@ -1,5 +1,6 @@
 package com.mycompany.millionaire.ui;
 
+import com.mycompany.millionaire.model.Answer;
 import com.mycompany.millionaire.model.Question;
 import com.mycompany.millionaire.service.AnswerResult;
 import com.mycompany.millionaire.service.GameController;
@@ -124,7 +125,13 @@ public class GameFrame extends JFrame {
         for (int i = 0; i < answerButtons.length; i++) {
             answerButtons[i] = new MillionaireButton(letters[i]);
             final int answerIndex = i;
-            answerButtons[i].addActionListener(e -> checkAnswer(answerIndex));
+            answerButtons[i].addActionListener(e -> {
+                Question currentQuestion = gameController.getCurrentQuestion();
+                if (currentQuestion != null) {
+                    Answer selectedAnswer = currentQuestion.getAnswers().get(answerIndex);
+                    checkAnswer(selectedAnswer, answerIndex);
+                }
+            });
             answerGrid.add(answerButtons[i]);
         }
 
@@ -178,8 +185,10 @@ public class GameFrame extends JFrame {
         }
 
         questionLabel.setText("<html><div style='text-align:center;'>" + question.getQuestion() + "</div></html>");
+        
+        List<Answer> answers = question.getAnswers();
         for (int i = 0; i < answerButtons.length; i++) {
-            answerButtons[i].setAnswerText(question.getOptions()[i]);
+            answerButtons[i].setAnswerText(answers.get(i).getInfo());
             answerButtons[i].setVisible(true);
             answerButtons[i].setEnabled(true);
             answerButtons[i].setBlinkColor(null);
@@ -193,8 +202,8 @@ public class GameFrame extends JFrame {
         AudioPlayer.playLoop(gameController.getQuestionLoopFile());
     }
 
-    private void checkAnswer(int selectedAnswer) {
-        if (waitingForAnimation || !answerButtons[selectedAnswer].isVisible()) {
+    private void checkAnswer(Answer selectedAnswer, int buttonIndex) {
+        if (waitingForAnimation || !answerButtons[buttonIndex].isVisible()) {
             return;
         }
 
@@ -202,7 +211,7 @@ public class GameFrame extends JFrame {
         setAnswerButtonsEnabled(false);
 
         AnswerResult result = gameController.submitAnswer(selectedAnswer);
-        MillionaireButton chosenButton = answerButtons[selectedAnswer];
+        MillionaireButton chosenButton = answerButtons[buttonIndex];
         MillionaireButton correctButton = answerButtons[result.getCorrectAnswer()];
 
         AudioPlayer.stopLoop();

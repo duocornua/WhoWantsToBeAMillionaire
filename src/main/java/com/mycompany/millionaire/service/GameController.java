@@ -4,6 +4,7 @@ import com.mycompany.millionaire.dsa.GameHistoryStack;
 import com.mycompany.millionaire.dsa.LifelineManager;
 import com.mycompany.millionaire.dsa.MoneyLadder;
 import com.mycompany.millionaire.dsa.QuestionQueue;
+import com.mycompany.millionaire.model.Answer;
 import com.mycompany.millionaire.model.GameRound;
 import com.mycompany.millionaire.model.Question;
 import com.mycompany.millionaire.model.QuestionBank;
@@ -40,18 +41,29 @@ public class GameController {
         return lifeline.useFiftyFifty(getCurrentQuestion());
     }
 
-    public AnswerResult submitAnswer(int selectedAnswer) {
+    public AnswerResult submitAnswer(Answer selectedAnswer) {
         Question question = getCurrentQuestion();
         int level = getCurrentLevel();
-        boolean correct = selectedAnswer == question.getCorrectAnswer();
+        
+        boolean correct = (selectedAnswer != null) && selectedAnswer.isCorrect();
         boolean finalQuestion = level == moneyLadder.size();
 
-        history.push(new GameRound(level, question, selectedAnswer, correct));
+        history.push(new GameRound(level, question, selectedAnswer));
+        
         if (correct) {
             questionQueue.moveToNextQuestion();
         }
 
-        return new AnswerResult(correct, finalQuestion, questionQueue.isFinished(), question.getCorrectAnswer());
+        int correctIndex = -1;
+        List<Answer> currentAnswers = question.getAnswers();
+        for (int i = 0; i < currentAnswers.size(); i++) {
+            if (currentAnswers.get(i).isCorrect()) {
+                correctIndex = i;
+                break;
+            }
+        }
+
+        return new AnswerResult(correct, finalQuestion, questionQueue.isFinished(), correctIndex);
     }
 
     public String getQuestionLoopFile() {
