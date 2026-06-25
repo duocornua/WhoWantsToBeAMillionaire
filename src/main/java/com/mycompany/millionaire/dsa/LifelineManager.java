@@ -11,6 +11,7 @@ public class LifelineManager {
     private boolean used;
 
     public List<Integer> useFiftyFifty(Question question) {
+        //comment
         if (used) {
             return Collections.emptyList();
         }
