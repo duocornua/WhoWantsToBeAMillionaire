@@ -4,6 +4,8 @@ import com.mycompany.millionaire.model.Answer;
 import com.mycompany.millionaire.model.Question;
 import com.mycompany.millionaire.service.AnswerResult;
 import com.mycompany.millionaire.service.GameController;
+import com.mycompany.millionaire.service.LeaderboardManager;
+import javax.swing.JOptionPane;
 import com.mycompany.millionaire.ui.component.BackgroundPanel;
 import com.mycompany.millionaire.ui.component.HexPanel;
 import com.mycompany.millionaire.ui.component.LogoPanel;
@@ -38,12 +40,15 @@ public class GameFrame extends JFrame {
     private final JButton quitButton = createControlButton("QUIT");
     private final JButton muteButton = createSoundButton();
     private final JLabel statusLabel = new JLabel("", SwingConstants.CENTER);
-
+    private long startTime;
     private boolean waitingForAnimation;
 
     public GameFrame() {
         System.setProperty("sun.java2d.noddraw", "true");
         initComponents();
+        
+        startTime = System.currentTimeMillis();
+        
         loadQuestion();
     }
 
@@ -224,6 +229,7 @@ public class GameFrame extends JFrame {
             statusLabel.setText("You Lost");
             blinkForResult(correctButton, chosenButton, false, () -> {
                 waitingForAnimation = false;
+                saveLeaderboard();
                 returnToMenu();
             });
         }
@@ -301,8 +307,45 @@ public class GameFrame extends JFrame {
         moneyLadder.setCurrentLevel(gameController.getMoneyLadder().size());
         setAnswerButtonsEnabled(false);
         helpButton.setEnabled(false);
+        
+        saveLeaderboard();
     }
 
+    private void saveLeaderboard() {
+
+        String name = JOptionPane.showInputDialog(
+                this,
+                "Enter your name:",
+                "Leaderboard",
+                JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (name == null || name.trim().isEmpty()) {
+            name = "Player";
+        }
+
+        LeaderboardManager manager = new LeaderboardManager();
+
+        manager.addPlayer(
+            name,
+            gameController.getCurrentMoney(),
+            gameController.getReachedLevel(),
+            getPlayTime()
+    );
+}
+    
+    private String getPlayTime() {
+
+    long elapsed = System.currentTimeMillis() - startTime;
+
+    long totalSeconds = elapsed / 1000;
+
+    long minutes = totalSeconds / 60;
+    long seconds = totalSeconds % 60;
+
+    return String.format("%02d:%02d", minutes, seconds);
+}
+    
     private void returnToMenu() {
         SwingUtilities.invokeLater(() -> {
             AudioPlayer.stopAll();

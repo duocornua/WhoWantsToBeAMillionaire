@@ -31,4 +31,12 @@ public class MoneyLadder {
         Collections.reverse(copy);
         return copy;
     }
+    public PrizeLevel getPrizeLevel(int level) {
+
+    if (level < 1 || level > levels.size()) {
+        return null;
+    }
+
+    return levels.get(level - 1);
+}
 }

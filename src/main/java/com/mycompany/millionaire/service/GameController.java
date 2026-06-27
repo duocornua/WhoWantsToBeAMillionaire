@@ -6,6 +6,7 @@ import com.mycompany.millionaire.dsa.MoneyLadder;
 import com.mycompany.millionaire.dsa.QuestionQueue;
 import com.mycompany.millionaire.model.Answer;
 import com.mycompany.millionaire.model.GameRound;
+import com.mycompany.millionaire.model.PrizeLevel;
 import com.mycompany.millionaire.model.Question;
 import com.mycompany.millionaire.model.QuestionBank;
 import java.util.List;
@@ -69,4 +70,18 @@ public class GameController {
     public String getQuestionLoopFile() {
         return getCurrentLevel() <= 5 ? "1to5.wav" : "6to15.wav";
     }
+    public int getReachedLevel() {
+    return history.size();
+}
+
+public int getCurrentMoney() {
+
+    PrizeLevel prize = moneyLadder.getPrizeLevel(history.size());
+
+    if (prize == null) {
+        return 0;
+    }
+
+    return prize.getMoney();
+}
 }

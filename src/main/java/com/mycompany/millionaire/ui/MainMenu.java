@@ -1,5 +1,6 @@
 package com.mycompany.millionaire.ui;
 
+import com.mycompany.millionaire.ui.LeaderboardFrame;
 import com.mycompany.millionaire.ui.component.CircleButton;
 import com.mycompany.millionaire.ui.component.MenuBackgroundPanel;
 import com.mycompany.millionaire.ui.component.SoundToggleButton;
@@ -93,9 +94,9 @@ public class MainMenu extends JFrame {
         muteGbc.insets = new Insets(18, 18, 0, 0);
         backgroundPanel.add(btnMute, muteGbc);
 
-        JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 0, 15));
+        JPanel buttonPanel = new JPanel(new GridLayout(4, 1, 0, 15));
         buttonPanel.setOpaque(false);
-        buttonPanel.setPreferredSize(new Dimension(320, 190));
+        buttonPanel.setPreferredSize(new Dimension(320, 260));
 
         JButton btnPlay = createMenuButton("PLAY GAME", btnFont, btnBorder);
         btnPlay.addActionListener(e -> {
@@ -111,6 +112,12 @@ public class MainMenu extends JFrame {
         });
         buttonPanel.add(btnPlay);
 
+        JButton btnLeaderboard = createMenuButton("LEADERBOARD", btnFont, btnBorder);
+        btnLeaderboard.addActionListener(e -> {
+            new LeaderboardFrame().setVisible(true);
+        });
+        buttonPanel.add(btnLeaderboard);
+        
         JButton btnAbout = createMenuButton("ABOUT", btnFont, btnBorder);
         btnAbout.addActionListener(e -> showAboutFrame());
         buttonPanel.add(btnAbout);
