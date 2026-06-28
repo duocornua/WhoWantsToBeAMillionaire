@@ -285,8 +285,7 @@ public class MainMenu extends JFrame {
             {"CE201342", "Nguyen Tran Phuc Dang", "Member"},
             {"CE201357", "Le Thuan Thanh", "Member"},
             {"CE180887", "Nguyen The Vinh", "Member"},
-            {"CE181696", "Truong Minh Vy", "Member"},
-        };
+            {"CE181696", "Truong Minh Vy", "Member"},};
         JPanel card = createInfoCard("Group Members", "");
         card.add(createStyledTable(members, new String[]{"Student ID", "Full Name", "Role"}), BorderLayout.CENTER);
         return card;

@@ -210,7 +210,7 @@ public class GameFrame extends JFrame {
         }
 
         questionLabel.setText("<html><div style='text-align:center;'>" + question.getQuestion() + "</div></html>");
-        
+
         List<Answer> answers = question.getAnswers();
         for (int i = 0; i < answerButtons.length; i++) {
             answerButtons[i].setAnswerText(answers.get(i).getInfo());
@@ -389,7 +389,7 @@ public class GameFrame extends JFrame {
 
         JPanel overlay = new JPanel(new GridBagLayout());
         overlay.setOpaque(false);
-       
+
         JPanel dialogPanel = new JPanel(new BorderLayout(16, 16));
         dialogPanel.setOpaque(true);
         dialogPanel.setBackground(UiTheme.PANEL_BLUE);
@@ -401,9 +401,6 @@ public class GameFrame extends JFrame {
         JLabel titleLabel = new JLabel("Exit Game?", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
         titleLabel.setForeground(UiTheme.GOLD);
-
-       
-
 
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 18, 0));
         buttonPanel.setOpaque(false);
