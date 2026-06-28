@@ -1,18 +1,5 @@
 package com.mycompany.millionaire.ui;
 
-import com.mycompany.millionaire.model.Answer;
-import com.mycompany.millionaire.model.Question;
-import com.mycompany.millionaire.service.AnswerResult;
-import com.mycompany.millionaire.service.GameController;
-import com.mycompany.millionaire.service.LeaderboardManager;
-import javax.swing.JOptionPane;
-import com.mycompany.millionaire.ui.component.BackgroundPanel;
-import com.mycompany.millionaire.ui.component.HexPanel;
-import com.mycompany.millionaire.ui.component.LogoPanel;
-import com.mycompany.millionaire.ui.component.MillionaireButton;
-import com.mycompany.millionaire.ui.component.MoneyLadderPanel;
-import com.mycompany.millionaire.ui.component.SoundToggleButton;
-import com.mycompany.millionaire.ui.component.UiTheme;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -21,14 +8,30 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import javax.swing.JOptionPane;
+
+import com.mycompany.millionaire.model.Answer;
+import com.mycompany.millionaire.model.Question;
+import com.mycompany.millionaire.service.AnswerResult;
+import com.mycompany.millionaire.service.GameController;
+import com.mycompany.millionaire.ui.component.BackgroundPanel;
+import com.mycompany.millionaire.ui.component.HexPanel;
+import com.mycompany.millionaire.ui.component.LogoPanel;
+import com.mycompany.millionaire.ui.component.MillionaireButton;
+import com.mycompany.millionaire.ui.component.MoneyLadderPanel;
+import com.mycompany.millionaire.ui.component.SoundToggleButton;
+import com.mycompany.millionaire.ui.component.UiTheme;
+import com.mycompany.millionaire.service.LeaderboardManager;
 
 public class GameFrame extends JFrame {
 
@@ -41,7 +44,12 @@ public class GameFrame extends JFrame {
     private final JButton muteButton = createSoundButton();
     private final JLabel statusLabel = new JLabel("", SwingConstants.CENTER);
     private long startTime;
+    private final JLabel timerLabel = new JLabel("60s", SwingConstants.CENTER);
+    private final JPanel timerPanel = createTimerPanel();
+
     private boolean waitingForAnimation;
+    private Timer countdownTimer;
+    private int remainingSeconds = 60;
 
     public GameFrame() {
         System.setProperty("sun.java2d.noddraw", "true");
@@ -72,7 +80,7 @@ public class GameFrame extends JFrame {
         content.add(center, BorderLayout.CENTER);
 
         helpButton.addActionListener(e -> execute5050());
-        quitButton.addActionListener(e -> returnToMenu());
+        quitButton.addActionListener(e -> showExitConfirmation());
         muteButton.addActionListener(e -> toggleMute());
 
         pack();
@@ -87,6 +95,7 @@ public class GameFrame extends JFrame {
         statusLabel.setForeground(UiTheme.RED);
         statusLabel.setPreferredSize(new Dimension(100, 62));
         topPanel.add(statusLabel, BorderLayout.NORTH);
+        topPanel.add(timerPanel, BorderLayout.WEST);
 
         JPanel controls = new JPanel(new GridBagLayout());
         controls.setOpaque(false);
@@ -162,6 +171,23 @@ public class GameFrame extends JFrame {
         return questionArea;
     }
 
+    private JPanel createTimerPanel() {
+        HexPanel timerBox = new HexPanel();
+        timerBox.setLayout(new BorderLayout());
+        timerBox.setPreferredSize(new Dimension(140, 58));
+        timerBox.setMinimumSize(new Dimension(120, 54));
+
+        timerLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        timerLabel.setForeground(UiTheme.GOLD);
+        timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        timerBox.add(timerLabel, BorderLayout.CENTER);
+
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setOpaque(false);
+        panel.add(timerBox, BorderLayout.CENTER);
+        return panel;
+    }
+
     private JButton createControlButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -190,7 +216,7 @@ public class GameFrame extends JFrame {
         }
 
         questionLabel.setText("<html><div style='text-align:center;'>" + question.getQuestion() + "</div></html>");
-        
+
         List<Answer> answers = question.getAnswers();
         for (int i = 0; i < answerButtons.length; i++) {
             answerButtons[i].setAnswerText(answers.get(i).getInfo());
@@ -204,6 +230,7 @@ public class GameFrame extends JFrame {
         helpButton.setEnabled(!gameController.isLifelineUsed());
         moneyLadder.setCurrentLevel(gameController.getCurrentLevel());
         moneyLadder.setBlinking(false);
+        resetCountdownTimer();
         AudioPlayer.playLoop(gameController.getQuestionLoopFile());
     }
 
@@ -214,6 +241,7 @@ public class GameFrame extends JFrame {
 
         waitingForAnimation = true;
         setAnswerButtonsEnabled(false);
+        stopCountdownTimer();
 
         AnswerResult result = gameController.submitAnswer(selectedAnswer);
         MillionaireButton chosenButton = answerButtons[buttonIndex];
@@ -302,6 +330,7 @@ public class GameFrame extends JFrame {
     }
 
     private void showWin() {
+        stopCountdownTimer();
         statusLabel.setForeground(UiTheme.GREEN);
         statusLabel.setText("You Win!");
         moneyLadder.setCurrentLevel(gameController.getMoneyLadder().size());
@@ -346,7 +375,103 @@ public class GameFrame extends JFrame {
     return String.format("%02d:%02d", minutes, seconds);
 }
     
+    private void resetCountdownTimer() {
+        stopCountdownTimer();
+        remainingSeconds = 60;
+        updateTimerLabel();
+        countdownTimer = new Timer(1000, e -> {
+            remainingSeconds--;
+            if (remainingSeconds <= 0) {
+                remainingSeconds = 0;
+                updateTimerLabel();
+                stopCountdownTimer();
+                handleTimeExpired();
+            } else {
+                updateTimerLabel();
+            }
+        });
+        countdownTimer.start();
+    }
+
+    private void stopCountdownTimer() {
+        if (countdownTimer != null) {
+            countdownTimer.stop();
+            countdownTimer = null;
+        }
+    }
+
+    private void updateTimerLabel() {
+        timerLabel.setText(remainingSeconds + "s");
+        timerLabel.setForeground(remainingSeconds <= 10 ? UiTheme.RED : UiTheme.GOLD);
+    }
+
+    private void handleTimeExpired() {
+        if (waitingForAnimation) {
+            return;
+        }
+
+        waitingForAnimation = true;
+        setAnswerButtonsEnabled(false);
+        AnswerResult result = gameController.submitAnswer(null);
+        AudioPlayer.stopLoop();
+        AudioPlayer.playOnce("wrong.wav");
+        statusLabel.setForeground(UiTheme.RED);
+        statusLabel.setText("Time's Up");
+
+        MillionaireButton correctButton = answerButtons[result.getCorrectAnswer()];
+        blinkForResult(correctButton, null, false, () -> {
+            waitingForAnimation = false;
+            returnToMenu();
+        });
+    }
+
+    private void showExitConfirmation() {
+        JDialog dialog = new JDialog(this, "Exit Game", true);
+        dialog.setUndecorated(true);
+        dialog.setModal(true);
+        dialog.setLocationRelativeTo(this);
+
+        JPanel overlay = new JPanel(new GridBagLayout());
+        overlay.setOpaque(false);
+
+        JPanel dialogPanel = new JPanel(new BorderLayout(16, 16));
+        dialogPanel.setOpaque(true);
+        dialogPanel.setBackground(UiTheme.PANEL_BLUE);
+        dialogPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(UiTheme.GOLD, 2, true),
+                BorderFactory.createEmptyBorder(24, 28, 24, 28)
+        ));
+
+        JLabel titleLabel = new JLabel("Exit Game?", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
+        titleLabel.setForeground(UiTheme.GOLD);
+
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 18, 0));
+        buttonPanel.setOpaque(false);
+
+        JButton yesButton = createControlButton("YES");
+        yesButton.addActionListener(e -> {
+            dialog.dispose();
+            returnToMenu();
+        });
+
+        JButton noButton = createControlButton("NO");
+        noButton.addActionListener(e -> dialog.dispose());
+
+        buttonPanel.add(yesButton);
+        buttonPanel.add(noButton);
+
+        dialogPanel.add(titleLabel, BorderLayout.NORTH);
+        dialogPanel.add(buttonPanel, BorderLayout.SOUTH);
+        overlay.add(dialogPanel);
+        dialog.setContentPane(overlay);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
     private void returnToMenu() {
+        stopCountdownTimer();
         SwingUtilities.invokeLater(() -> {
             AudioPlayer.stopAll();
             new MainMenu().setVisible(true);
