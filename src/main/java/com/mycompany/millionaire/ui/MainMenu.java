@@ -1,8 +1,5 @@
 package com.mycompany.millionaire.ui;
 
-import com.mycompany.millionaire.ui.component.CircleButton;
-import com.mycompany.millionaire.ui.component.MenuBackgroundPanel;
-import com.mycompany.millionaire.ui.component.SoundToggleButton;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -13,6 +10,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -28,6 +26,10 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
+
+import com.mycompany.millionaire.ui.component.CircleButton;
+import com.mycompany.millionaire.ui.component.MenuBackgroundPanel;
+import com.mycompany.millionaire.ui.component.SoundToggleButton;
 
 public class MainMenu extends JFrame {
 
@@ -118,7 +120,7 @@ public class MainMenu extends JFrame {
         JButton btnExit = createMenuButton("EXIT", btnFont, btnBorder);
         btnExit.addActionListener(e -> {
             AudioPlayer.stopAll();
-            System.exit(0);
+            new GoodbyeScreen().showForSeconds(1);
         });
         buttonPanel.add(btnExit);
 
@@ -283,8 +285,7 @@ public class MainMenu extends JFrame {
             {"CE201342", "Nguyen Tran Phuc Dang", "Member"},
             {"CE201357", "Le Thuan Thanh", "Member"},
             {"CE180887", "Nguyen The Vinh", "Member"},
-            {"CE181696", "Truong Minh Vy", "Member"},
-        };
+            {"CE181696", "Truong Minh Vy", "Member"},};
         JPanel card = createInfoCard("Group Members", "");
         card.add(createStyledTable(members, new String[]{"Student ID", "Full Name", "Role"}), BorderLayout.CENTER);
         return card;
