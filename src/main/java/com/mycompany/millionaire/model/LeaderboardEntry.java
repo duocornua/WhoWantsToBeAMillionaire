@@ -7,7 +7,7 @@ public class LeaderboardEntry implements Comparable<LeaderboardEntry> {
     private int level;
     private String playTime;
 
-    public LeaderboardEntry(String playerName, int money, int level, String dateTime) {
+    public LeaderboardEntry(String playerName, int money, int level, String playTime) {
         this.playerName = playerName;
         this.money = money;
         this.level = level;
@@ -48,15 +48,42 @@ public class LeaderboardEntry implements Comparable<LeaderboardEntry> {
 
     @Override
     public int compareTo(LeaderboardEntry other) {
-        return Integer.compare(other.money, this.money);
+
+        if (this.money != other.money) {
+            return Integer.compare(other.money, this.money);
+        }
+
+        if (this.level != other.level) {
+            return Integer.compare(other.level, this.level);
+        }
+
+        return Integer.compare(
+                convertToSecond(this.playTime),
+                convertToSecond(other.playTime)
+        );
+    }
+
+    private int convertToSecond(String time) {
+
+        try {
+            String[] t = time.split(":");
+
+            int minute = Integer.parseInt(t[0]);
+            int second = Integer.parseInt(t[1]);
+
+            return minute * 60 + second;
+        } catch (Exception e) {
+            return Integer.MAX_VALUE;
+        }
+
     }
 
     @Override
     public String toString() {
         return playerName + ";" + money + ";" + level + ";" + playTime;
     }
-    
-public static LeaderboardEntry fromString(String line) {
+
+    public static LeaderboardEntry fromString(String line) {
 
         String[] data = line.split(";");
 

@@ -421,6 +421,7 @@ public class GameFrame extends JFrame {
         MillionaireButton correctButton = answerButtons[result.getCorrectAnswer()];
         blinkForResult(correctButton, null, false, () -> {
             waitingForAnimation = false;
+            saveLeaderboard();
             returnToMenu();
         });
     }
@@ -452,6 +453,7 @@ public class GameFrame extends JFrame {
         JButton yesButton = createControlButton("YES");
         yesButton.addActionListener(e -> {
             dialog.dispose();
+            saveLeaderboard();
             returnToMenu();
         });
 

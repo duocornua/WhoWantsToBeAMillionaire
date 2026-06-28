@@ -1,2 +1,0 @@
-t.vinh;8000;8;null
-vinh;200;2;null
