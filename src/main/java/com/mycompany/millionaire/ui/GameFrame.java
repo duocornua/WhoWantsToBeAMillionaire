@@ -54,9 +54,9 @@ public class GameFrame extends JFrame {
     public GameFrame() {
         System.setProperty("sun.java2d.noddraw", "true");
         initComponents();
-        
+
         startTime = System.currentTimeMillis();
-        
+
         loadQuestion();
     }
 
@@ -336,7 +336,7 @@ public class GameFrame extends JFrame {
         moneyLadder.setCurrentLevel(gameController.getMoneyLadder().size());
         setAnswerButtonsEnabled(false);
         helpButton.setEnabled(false);
-        
+
         saveLeaderboard();
     }
 
@@ -356,25 +356,25 @@ public class GameFrame extends JFrame {
         LeaderboardManager manager = new LeaderboardManager();
 
         manager.addPlayer(
-            name,
-            gameController.getCurrentMoney(),
-            gameController.getReachedLevel(),
-            getPlayTime()
-    );
-}
-    
+                name,
+                gameController.getCurrentMoney(),
+                gameController.getReachedLevel(),
+                getPlayTime()
+        );
+    }
+
     private String getPlayTime() {
 
-    long elapsed = System.currentTimeMillis() - startTime;
+        long elapsed = System.currentTimeMillis() - startTime;
 
-    long totalSeconds = elapsed / 1000;
+        long totalSeconds = elapsed / 1000;
 
-    long minutes = totalSeconds / 60;
-    long seconds = totalSeconds % 60;
+        long minutes = totalSeconds / 60;
+        long seconds = totalSeconds % 60;
 
-    return String.format("%02d:%02d", minutes, seconds);
-}
-    
+        return String.format("%02d:%02d", minutes, seconds);
+    }
+
     private void resetCountdownTimer() {
         stopCountdownTimer();
         remainingSeconds = 60;

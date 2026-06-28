@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class LeaderboardManager {
-    
+
     private static final String FILE_NAME = "leaderboard.txt";
 
     private final ArrayList<LeaderboardEntry> leaderboard;

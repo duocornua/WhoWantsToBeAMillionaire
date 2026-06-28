@@ -1,6 +1,5 @@
 package com.mycompany.millionaire.ui;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -120,7 +119,7 @@ public class MainMenu extends JFrame {
             new LeaderboardFrame().setVisible(true);
         });
         buttonPanel.add(btnLeaderboard);
-        
+
         JButton btnAbout = createMenuButton("ABOUT", btnFont, btnBorder);
         btnAbout.addActionListener(e -> showAboutFrame());
         buttonPanel.add(btnAbout);
