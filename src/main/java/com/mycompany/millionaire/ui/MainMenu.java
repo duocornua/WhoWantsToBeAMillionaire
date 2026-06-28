@@ -120,7 +120,7 @@ public class MainMenu extends JFrame {
         JButton btnExit = createMenuButton("EXIT", btnFont, btnBorder);
         btnExit.addActionListener(e -> {
             AudioPlayer.stopAll();
-            new GoodbyeScreen().showForSeconds(3);
+            new GoodbyeScreen().showForSeconds(1);
         });
         buttonPanel.add(btnExit);
 
