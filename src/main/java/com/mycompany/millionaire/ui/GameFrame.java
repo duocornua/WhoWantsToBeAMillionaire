@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import javax.swing.JOptionPane;
 
 import com.mycompany.millionaire.model.Answer;
 import com.mycompany.millionaire.model.Question;
@@ -30,6 +31,7 @@ import com.mycompany.millionaire.ui.component.MillionaireButton;
 import com.mycompany.millionaire.ui.component.MoneyLadderPanel;
 import com.mycompany.millionaire.ui.component.SoundToggleButton;
 import com.mycompany.millionaire.ui.component.UiTheme;
+import com.mycompany.millionaire.service.LeaderboardManager;
 
 public class GameFrame extends JFrame {
 
@@ -41,6 +43,7 @@ public class GameFrame extends JFrame {
     private final JButton quitButton = createControlButton("QUIT");
     private final JButton muteButton = createSoundButton();
     private final JLabel statusLabel = new JLabel("", SwingConstants.CENTER);
+    private long startTime;
     private final JLabel timerLabel = new JLabel("60s", SwingConstants.CENTER);
     private final JPanel timerPanel = createTimerPanel();
 
@@ -51,6 +54,9 @@ public class GameFrame extends JFrame {
     public GameFrame() {
         System.setProperty("sun.java2d.noddraw", "true");
         initComponents();
+
+        startTime = System.currentTimeMillis();
+
         loadQuestion();
     }
 
@@ -251,6 +257,7 @@ public class GameFrame extends JFrame {
             statusLabel.setText("You Lost");
             blinkForResult(correctButton, chosenButton, false, () -> {
                 waitingForAnimation = false;
+                saveLeaderboard();
                 returnToMenu();
             });
         }
@@ -329,6 +336,43 @@ public class GameFrame extends JFrame {
         moneyLadder.setCurrentLevel(gameController.getMoneyLadder().size());
         setAnswerButtonsEnabled(false);
         helpButton.setEnabled(false);
+
+        saveLeaderboard();
+    }
+
+    private void saveLeaderboard() {
+
+        String name = JOptionPane.showInputDialog(
+                this,
+                "Enter your name:",
+                "Leaderboard",
+                JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (name == null || name.trim().isEmpty()) {
+            name = "Player";
+        }
+
+        LeaderboardManager manager = new LeaderboardManager();
+
+        manager.addPlayer(
+                name,
+                gameController.getCurrentMoney(),
+                gameController.getReachedLevel(),
+                getPlayTime()
+        );
+    }
+
+    private String getPlayTime() {
+
+        long elapsed = System.currentTimeMillis() - startTime;
+
+        long totalSeconds = elapsed / 1000;
+
+        long minutes = totalSeconds / 60;
+        long seconds = totalSeconds % 60;
+
+        return String.format("%02d:%02d", minutes, seconds);
     }
 
     private void resetCountdownTimer() {
@@ -377,6 +421,7 @@ public class GameFrame extends JFrame {
         MillionaireButton correctButton = answerButtons[result.getCorrectAnswer()];
         blinkForResult(correctButton, null, false, () -> {
             waitingForAnimation = false;
+            saveLeaderboard();
             returnToMenu();
         });
     }
@@ -408,6 +453,7 @@ public class GameFrame extends JFrame {
         JButton yesButton = createControlButton("YES");
         yesButton.addActionListener(e -> {
             dialog.dispose();
+            saveLeaderboard();
             returnToMenu();
         });
 
