@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.millionaire.service;
 
 import com.mycompany.millionaire.model.LeaderboardEntry;
@@ -12,10 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-/**
- *
- * @author Admin
- */
+
 public class LeaderboardManager {
     
     private static final String FILE_NAME = "leaderboard.txt";
