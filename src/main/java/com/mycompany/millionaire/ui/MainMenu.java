@@ -1,8 +1,5 @@
 package com.mycompany.millionaire.ui;
 
-import com.mycompany.millionaire.ui.component.CircleButton;
-import com.mycompany.millionaire.ui.component.MenuBackgroundPanel;
-import com.mycompany.millionaire.ui.component.SoundToggleButton;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -13,6 +10,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -28,6 +26,10 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
+
+import com.mycompany.millionaire.ui.component.CircleButton;
+import com.mycompany.millionaire.ui.component.MenuBackgroundPanel;
+import com.mycompany.millionaire.ui.component.SoundToggleButton;
 
 public class MainMenu extends JFrame {
 
@@ -118,7 +120,7 @@ public class MainMenu extends JFrame {
         JButton btnExit = createMenuButton("EXIT", btnFont, btnBorder);
         btnExit.addActionListener(e -> {
             AudioPlayer.stopAll();
-            System.exit(0);
+            new GoodbyeScreen().showForSeconds(3);
         });
         buttonPanel.add(btnExit);
 
