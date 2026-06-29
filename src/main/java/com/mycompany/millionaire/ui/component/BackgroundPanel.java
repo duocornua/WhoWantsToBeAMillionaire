@@ -7,8 +7,16 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.JPanel;
 
+/**
+ * Paints the dark blue gradient used behind gameplay and leaderboard screens.
+ */
 public class BackgroundPanel extends JPanel {
 
+    /**
+     * Paints the gradient background.
+     *
+     * @param g graphics context supplied by Swing
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

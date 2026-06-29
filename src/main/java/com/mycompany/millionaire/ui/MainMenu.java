@@ -27,11 +27,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
-import com.mycompany.millionaire.ui.LeaderboardFrame;
 import com.mycompany.millionaire.ui.component.CircleButton;
 import com.mycompany.millionaire.ui.component.MenuBackgroundPanel;
 import com.mycompany.millionaire.ui.component.SoundToggleButton;
 
+/**
+ * Main menu window that starts the game and opens support dialogs.
+ */
 public class MainMenu extends JFrame {
 
     private static final Color MENU_BLUE = new Color(0, 0, 64);
@@ -39,11 +41,17 @@ public class MainMenu extends JFrame {
     private static final Color GOLD = new Color(255, 204, 0);
     private static final Color WHITE = Color.WHITE;
 
+    /**
+     * Creates the main menu and starts the menu music.
+     */
     public MainMenu() {
         initComponents();
         AudioPlayer.playLoop("menu.wav");
     }
 
+    /**
+     * Builds the main menu background, help button, mute button, and actions.
+     */
     private void initComponents() {
         setTitle("Who Wants To Be A Millionaire");
         setSize(800, 600);
@@ -141,6 +149,14 @@ public class MainMenu extends JFrame {
         backgroundPanel.add(buttonPanel, gbc);
     }
 
+    /**
+     * Creates a standard rectangular menu button.
+     *
+     * @param text button label
+     * @param font font used for the label
+     * @param border border shared by menu buttons
+     * @return configured menu button
+     */
     private JButton createMenuButton(String text, Font font, LineBorder border) {
         JButton button = new JButton(text);
         button.setFont(font);
@@ -151,6 +167,9 @@ public class MainMenu extends JFrame {
         return button;
     }
 
+    /**
+     * Opens the how-to-play dialog.
+     */
     private void showHowToPlayFrame() {
         JFrame helpFrame = new JFrame("How to Play");
         helpFrame.setSize(560, 500);
@@ -177,9 +196,12 @@ public class MainMenu extends JFrame {
         helpFrame.setVisible(true);
     }
 
+    /**
+     * Opens the project information dialog.
+     */
     private void showAboutFrame() {
         JFrame aboutFrame = new JFrame("About This Project");
-        aboutFrame.setSize(820, 720);
+        aboutFrame.setSize(860, 760);
         aboutFrame.setLocationRelativeTo(this);
         aboutFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -200,8 +222,8 @@ public class MainMenu extends JFrame {
         content.add(createInfoCard("Game Introduction",
                 "Who Wants to be a Millionaire is a Java Swing desktop quiz game inspired by the famous television game show. "
                 + "The project practices object-oriented programming, event handling, user interface design, and question management in Java.\n\n"
-                + "The player answers 15 multiple-choice questions and climbs a money ladder. Difficulty increases through easy, medium, hard, "
-                + "and extra hard question pools."));
+                + "The player answers 15 multiple-choice questions, races a 60-second timer on each round, and climbs a money ladder. "
+                + "Difficulty increases through easy, medium, hard, and extra hard question pools."));
         content.add(Box.createVerticalStrut(12));
         content.add(createInfoCard("How to Play",
                 "1. Click PLAY GAME from the main menu.\n"
@@ -209,7 +231,8 @@ public class MainMenu extends JFrame {
                 + "3. Choose A, B, C, or D.\n"
                 + "4. Use 50/50 once per playthrough to remove two wrong answers.\n"
                 + "5. Keep answering correctly to climb the money ladder.\n"
-                + "6. Answer question 15 correctly to win the game."));
+                + "6. Answer question 15 correctly to win the game.\n"
+                + "7. Enter your name so your result can appear on the leaderboard."));
         content.add(Box.createVerticalStrut(12));
         content.add(createInfoCard("Game Rules",
                 "- The game contains 15 questions.\n"
@@ -218,13 +241,17 @@ public class MainMenu extends JFrame {
                 + "- Questions 11-14 use the Hard question list.\n"
                 + "- Question 15 uses the Extra Hard question list.\n"
                 + "- One wrong answer ends the game.\n"
-                + "- The 50/50 button can only be used once."));
+                + "- Running out of time also ends the game.\n"
+                + "- The 50/50 button can only be used once.\n"
+                + "- The leaderboard keeps the best 10 results by money, level, and time."));
         content.add(Box.createVerticalStrut(12));
         content.add(createInfoCard("Frame Interfaces",
-                "The game consists of 3 main frames:\n\n"
-                + "1. Main Menu - Play Game, About, Help, Exit, and menu music.\n"
-                + "2. About - Project information, group members, rules, and tech stack.\n"
-                + "3. Gameplay - Question area, answer buttons, 50/50, Quit, money ladder, logo, and game audio."));
+                "The game consists of 5 main interfaces:\n\n"
+                + "1. Main Menu - Play Game, Leaderboard, About, Help, Exit, and menu music.\n"
+                + "2. Help - quick rules and gameplay feedback guide.\n"
+                + "3. About - project information, group members, rules, DSA, and tech stack.\n"
+                + "4. Gameplay - question area, timer, answer buttons, 50/50, Quit, money ladder, logo, and game audio.\n"
+                + "5. Leaderboard - saved top 10 player results with clear and close controls."));
         content.add(Box.createVerticalStrut(12));
         content.add(createDsaCard());
         content.add(Box.createVerticalStrut(12));
@@ -246,6 +273,12 @@ public class MainMenu extends JFrame {
         SwingUtilities.invokeLater(() -> scrollPane.getViewport().setViewPosition(new Point(0, 0)));
     }
 
+    /**
+     * Creates a reusable dialog shell with a title area.
+     *
+     * @param titleText title shown at the top of the dialog
+     * @return panel ready to receive dialog content
+     */
     private JPanel createDialogShell(String titleText) {
         JPanel panel = new JPanel(new BorderLayout(18, 18));
         panel.setBackground(MENU_BLUE);
@@ -258,6 +291,14 @@ public class MainMenu extends JFrame {
         return panel;
     }
 
+    /**
+     * Creates a bordered information card with a heading and optional body
+     * text.
+     *
+     * @param heading card heading
+     * @param body body text, or blank for table-only cards
+     * @return styled card panel
+     */
     private JPanel createInfoCard(String heading, String body) {
         JPanel card = new JPanel(new BorderLayout(8, 8));
         card.setBackground(CARD_BLUE);
@@ -286,6 +327,11 @@ public class MainMenu extends JFrame {
         return card;
     }
 
+    /**
+     * Creates the group member table card.
+     *
+     * @return card containing group member details
+     */
     private JPanel createMembersCard() {
         String[][] members = {
             {"CE200157", "Vuong Kien Hao", "Member"},
@@ -298,11 +344,17 @@ public class MainMenu extends JFrame {
         return card;
     }
 
+    /**
+     * Creates the technology stack table card.
+     *
+     * @return card containing technologies used by the project
+     */
     private JPanel createTechCard() {
         String[][] tech = {
             {"Language", "Java"},
             {"UI Framework", "Java Swing"},
-            {"Build Tool", "Maven / NetBeans-compatible project structure"},
+            {"Build Tool", "Maven"},
+            {"Runtime Target", "Java 21"},
             {"Course Focus", "Data Structures and Algorithms"},
             {"Main DSA Packages", "model, dsa, service"}
         };
@@ -311,6 +363,11 @@ public class MainMenu extends JFrame {
         return card;
     }
 
+    /**
+     * Creates the DSA summary table card.
+     *
+     * @return card describing data structures used in the game
+     */
     private JPanel createDsaCard() {
         String[][] rows = {
             {"ArrayList", "Stores question pools and the 15-level prize ladder"},
@@ -324,6 +381,13 @@ public class MainMenu extends JFrame {
         return card;
     }
 
+    /**
+     * Creates a styled, read-only table for the About dialog.
+     *
+     * @param rows table row data
+     * @param columns table column names
+     * @return panel containing a styled table and header
+     */
     private JComponent createStyledTable(String[][] rows, String[] columns) {
         JTable table = new JTable(rows, columns);
         table.setRowHeight(28);
@@ -346,6 +410,11 @@ public class MainMenu extends JFrame {
         return tablePanel;
     }
 
+    /**
+     * Hides scroll bars while keeping mouse wheel scrolling available.
+     *
+     * @param scrollPane scroll pane to style
+     */
     private void styleHiddenScrollPane(JScrollPane scrollPane) {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);

@@ -7,14 +7,25 @@ import java.awt.RenderingHints;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+/**
+ * Scales and centers the game logo image.
+ */
 public class LogoPanel extends JPanel {
 
     private final Image logo = new ImageIcon("logo.png").getImage();
 
+    /**
+     * Creates a transparent logo panel.
+     */
     public LogoPanel() {
         setOpaque(false);
     }
 
+    /**
+     * Draws the logo at the largest size that fits inside the panel.
+     *
+     * @param g graphics context supplied by Swing
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

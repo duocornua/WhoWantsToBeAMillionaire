@@ -9,17 +9,26 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Loads, saves, sorts, and clears the top leaderboard entries.
+ */
 public class LeaderboardManager {
 
     private static final String FILE_NAME = "leaderboard.txt";
 
     private final ArrayList<LeaderboardEntry> leaderboard;
 
+    /**
+     * Creates a manager and loads existing entries from disk.
+     */
     public LeaderboardManager() {
         leaderboard = new ArrayList<>();
         load();
     }
 
+    /**
+     * Reads leaderboard rows from the text file into memory.
+     */
     private void load() {
         leaderboard.clear();
 
@@ -48,6 +57,9 @@ public class LeaderboardManager {
         }
     }
 
+    /**
+     * Writes the in-memory leaderboard back to the text file.
+     */
     private void save() {
 
         try (FileWriter fw = new FileWriter(FILE_NAME)) {
@@ -61,6 +73,14 @@ public class LeaderboardManager {
         }
     }
 
+    /**
+     * Adds a player result, sorts the table, trims it to the top 10, and saves.
+     *
+     * @param name player display name
+     * @param money prize money reached
+     * @param level highest level reached
+     * @param playTime elapsed time in {@code mm:ss} format
+     */
     public void addPlayer(String name, int money, int level, String playTime) {
 
         leaderboard.add(new LeaderboardEntry(name, money, level, playTime));
@@ -74,19 +94,35 @@ public class LeaderboardManager {
         save();
     }
 
+    /**
+     * Gets the current leaderboard entries.
+     *
+     * @return mutable list of entries sorted by rank
+     */
     public ArrayList<LeaderboardEntry> getLeaderboard() {
         return leaderboard;
     }
 
+    /**
+     * Deletes all leaderboard entries and saves the empty file.
+     */
     public void clear() {
         leaderboard.clear();
         save();
     }
 
+    /**
+     * Reloads entries from disk.
+     */
     public void reload() {
         load();
     }
 
+    /**
+     * Checks whether the leaderboard has no entries.
+     *
+     * @return {@code true} when there are no saved scores
+     */
     public boolean isEmpty() {
         return leaderboard.isEmpty();
     }

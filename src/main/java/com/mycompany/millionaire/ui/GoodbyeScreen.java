@@ -11,16 +11,25 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
+/**
+ * Short farewell window shown before the application exits.
+ */
 public class GoodbyeScreen extends JFrame {
 
     private static final Color BACKGROUND_BLUE = new Color(0, 0, 64);
     private static final Color GOLD = new Color(255, 204, 0);
     private static final Color WHITE = Color.WHITE;
 
+    /**
+     * Creates the goodbye screen.
+     */
     public GoodbyeScreen() {
         initComponents();
     }
 
+    /**
+     * Builds the farewell message layout.
+     */
     private void initComponents() {
         setTitle("Goodbye");
         setSize(new Dimension(640, 280));
@@ -45,6 +54,11 @@ public class GoodbyeScreen extends JFrame {
         setContentPane(content);
     }
 
+    /**
+     * Shows the screen briefly, then exits the application.
+     *
+     * @param seconds number of seconds to display the screen
+     */
     public void showForSeconds(int seconds) {
         setVisible(true);
         Timer timer = new Timer(seconds * 1000, e -> {

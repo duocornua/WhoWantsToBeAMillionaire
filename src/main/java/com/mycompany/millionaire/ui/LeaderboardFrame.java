@@ -22,6 +22,9 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * Displays the saved top 10 scores in a table.
+ */
 public class LeaderboardFrame extends JFrame {
 
     private final LeaderboardManager manager = new LeaderboardManager();
@@ -32,11 +35,17 @@ public class LeaderboardFrame extends JFrame {
     private JButton btnClear;
     private JButton btnClose;
 
+    /**
+     * Creates the leaderboard frame and loads current data.
+     */
     public LeaderboardFrame() {
         initComponents();
         loadData();
     }
 
+    /**
+     * Builds the table, title, and bottom action buttons.
+     */
     private void initComponents() {
 
         setTitle("Leaderboard");
@@ -63,6 +72,13 @@ public class LeaderboardFrame extends JFrame {
                     "Play Time"
                 }, 0) {
 
+            /**
+             * Keeps leaderboard cells read-only.
+             *
+             * @param row table row index
+             * @param column table column index
+             * @return always {@code false}
+             */
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -88,9 +104,6 @@ public class LeaderboardFrame extends JFrame {
         table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 16));
         table.getTableHeader().setBorder(
                 BorderFactory.createLineBorder(Color.WHITE));
-
-        DefaultTableCellRenderer center = new DefaultTableCellRenderer();
-        center.setHorizontalAlignment(SwingConstants.CENTER);
 
         DefaultTableCellRenderer left = new DefaultTableCellRenderer();
         left.setHorizontalAlignment(SwingConstants.LEFT);
@@ -146,6 +159,9 @@ public class LeaderboardFrame extends JFrame {
         background.add(bottom, BorderLayout.SOUTH);
     }
 
+    /**
+     * Loads leaderboard entries from the manager into the table model.
+     */
     private void loadData() {
 
         model.setRowCount(0);
@@ -168,6 +184,9 @@ public class LeaderboardFrame extends JFrame {
         }
     }
 
+    /**
+     * Confirms and clears all saved leaderboard entries.
+     */
     private void clearLeaderboard() {
 
         int option = JOptionPane.showConfirmDialog(

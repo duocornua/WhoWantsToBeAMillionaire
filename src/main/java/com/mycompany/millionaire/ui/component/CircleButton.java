@@ -7,8 +7,16 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.JButton;
 
+/**
+ * Circular button used for compact menu actions such as help.
+ */
 public class CircleButton extends JButton {
 
+    /**
+     * Creates a circular button with text centered inside it.
+     *
+     * @param text text shown in the circle
+     */
     public CircleButton(String text) {
         super(text);
         setPreferredSize(new Dimension(48, 48));
@@ -16,6 +24,11 @@ public class CircleButton extends JButton {
         setBorderPainted(false);
     }
 
+    /**
+     * Paints the circular body and outline before Swing draws the text.
+     *
+     * @param g graphics context supplied by Swing
+     */
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
@@ -29,6 +42,11 @@ public class CircleButton extends JButton {
         super.paintComponent(g);
     }
 
+    /**
+     * Skips default border painting because the circle draws its own outline.
+     *
+     * @param g graphics context supplied by Swing
+     */
     @Override
     protected void paintBorder(Graphics g) {
     }

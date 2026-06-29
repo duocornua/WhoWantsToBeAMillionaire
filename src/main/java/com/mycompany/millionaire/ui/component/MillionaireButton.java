@@ -12,6 +12,9 @@ import java.awt.Polygon;
 import java.awt.RenderingHints;
 import javax.swing.JButton;
 
+/**
+ * Custom hexagonal answer button used for A/B/C/D choices.
+ */
 public class MillionaireButton extends JButton {
 
     private final String letter;
@@ -19,6 +22,11 @@ public class MillionaireButton extends JButton {
     private Color blinkColor;
     private boolean staticReveal;
 
+    /**
+     * Creates an answer button with its answer letter prefix.
+     *
+     * @param letter answer letter, such as {@code A:}
+     */
     public MillionaireButton(String letter) {
         this.letter = letter;
         setContentAreaFilled(false);
@@ -29,21 +37,41 @@ public class MillionaireButton extends JButton {
         setPreferredSize(new Dimension(360, 86));
     }
 
+    /**
+     * Updates the answer text drawn inside the custom button.
+     *
+     * @param answer answer text without the A/B/C/D prefix
+     */
     public void setAnswerText(String answer) {
         this.answer = answer;
         setText(letter + " " + answer);
     }
 
+    /**
+     * Sets the temporary fill color used for feedback blinking.
+     *
+     * @param blinkColor highlight color, or {@code null} for the normal color
+     */
     public void setBlinkColor(Color blinkColor) {
         this.blinkColor = blinkColor;
         repaint();
     }
 
+    /**
+     * Keeps the selected wrong answer visibly marked during reveal animation.
+     *
+     * @param staticReveal {@code true} to draw the selected button as revealed
+     */
     public void setStaticReveal(boolean staticReveal) {
         this.staticReveal = staticReveal;
         repaint();
     }
 
+    /**
+     * Paints the hexagonal answer button, border, letter, and fitted answer.
+     *
+     * @param g graphics context supplied by Swing
+     */
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
@@ -90,6 +118,15 @@ public class MillionaireButton extends JButton {
         g2.dispose();
     }
 
+    /**
+     * Draws text with a smaller font when needed so it fits the answer button.
+     *
+     * @param g2 graphics context
+     * @param text text to draw
+     * @param x left position
+     * @param baseline text baseline
+     * @param maxWidth maximum available width
+     */
     private void drawFittedText(Graphics2D g2, String text, int x, int baseline, int maxWidth) {
         Font original = g2.getFont();
         FontMetrics metrics = g2.getFontMetrics();

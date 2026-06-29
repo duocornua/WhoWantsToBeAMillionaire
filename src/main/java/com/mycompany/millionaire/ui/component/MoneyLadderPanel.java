@@ -13,28 +13,51 @@ import java.awt.Polygon;
 import java.awt.RenderingHints;
 import javax.swing.JPanel;
 
+/**
+ * Draws the 15-level prize ladder and highlights the current level.
+ */
 public class MoneyLadderPanel extends JPanel {
 
     private final MoneyLadder ladder;
     private int currentLevel = 1;
     private boolean blinking;
 
+    /**
+     * Creates a ladder panel backed by a money ladder model.
+     *
+     * @param ladder prize ladder to render
+     */
     public MoneyLadderPanel(MoneyLadder ladder) {
         this.ladder = ladder;
         setOpaque(false);
         setPreferredSize(new Dimension(310, 610));
     }
 
+    /**
+     * Updates which level is highlighted.
+     *
+     * @param currentLevel current 1-based level
+     */
     public void setCurrentLevel(int currentLevel) {
         this.currentLevel = currentLevel;
         repaint();
     }
 
+    /**
+     * Turns the current-level blink effect on or off.
+     *
+     * @param blinking {@code true} to use the green blink highlight
+     */
     public void setBlinking(boolean blinking) {
         this.blinking = blinking;
         repaint();
     }
 
+    /**
+     * Paints the ladder background and every prize row.
+     *
+     * @param g graphics context supplied by Swing
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -51,6 +74,13 @@ public class MoneyLadderPanel extends JPanel {
         g2.dispose();
     }
 
+    /**
+     * Draws one row in the prize ladder.
+     *
+     * @param g2 graphics context
+     * @param prize prize level to draw
+     * @param rowHeight height of one ladder row
+     */
     private void drawPrizeRow(Graphics2D g2, PrizeLevel prize, int rowHeight) {
         int level = prize.getLevel();
         int rowFromTop = ladder.size() - level;
@@ -76,10 +106,25 @@ public class MoneyLadderPanel extends JPanel {
         drawMoneyText(g2, formatMoney(prize.getMoney()), 128, baseline, getWidth() - 138);
     }
 
+    /**
+     * Formats a prize value for display.
+     *
+     * @param value prize money
+     * @return formatted money text
+     */
     private String formatMoney(int value) {
         return String.format("$%,d", value);
     }
 
+    /**
+     * Draws money text and shrinks the font when the amount is too wide.
+     *
+     * @param g2 graphics context
+     * @param text money text
+     * @param x left position
+     * @param baseline text baseline
+     * @param maxWidth maximum available width
+     */
     private void drawMoneyText(Graphics2D g2, String text, int x, int baseline, int maxWidth) {
         Font original = g2.getFont();
         FontMetrics metrics = g2.getFontMetrics();
