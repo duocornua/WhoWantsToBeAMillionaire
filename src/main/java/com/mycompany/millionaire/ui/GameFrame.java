@@ -33,6 +33,10 @@ import com.mycompany.millionaire.ui.component.SoundToggleButton;
 import com.mycompany.millionaire.ui.component.UiTheme;
 import com.mycompany.millionaire.service.LeaderboardManager;
 
+/**
+ * Main gameplay window where questions, answers, lifelines, timer, and ladder
+ * are displayed.
+ */
 public class GameFrame extends JFrame {
 
     private final GameController gameController = new GameController();
@@ -51,6 +55,9 @@ public class GameFrame extends JFrame {
     private Timer countdownTimer;
     private int remainingSeconds = 60;
 
+    /**
+     * Creates a new game frame and loads the first question.
+     */
     public GameFrame() {
         System.setProperty("sun.java2d.noddraw", "true");
         initComponents();
@@ -60,6 +67,9 @@ public class GameFrame extends JFrame {
         loadQuestion();
     }
 
+    /**
+     * Builds the main frame layout and connects top-level button actions.
+     */
     private void initComponents() {
         setTitle("Who Wants To Be A Millionaire");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -87,6 +97,11 @@ public class GameFrame extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Creates the status, timer, mute, lifeline, and quit control area.
+     *
+     * @return configured top panel
+     */
     private JPanel createTopPanel() {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setOpaque(false);
@@ -111,6 +126,11 @@ public class GameFrame extends JFrame {
         return topPanel;
     }
 
+    /**
+     * Creates the logo, question box, and answer button grid.
+     *
+     * @return center question area
+     */
     private JPanel createQuestionArea() {
         JPanel questionArea = new JPanel(new GridBagLayout());
         questionArea.setOpaque(false);
@@ -171,6 +191,11 @@ public class GameFrame extends JFrame {
         return questionArea;
     }
 
+    /**
+     * Creates the panel that shows the remaining time.
+     *
+     * @return timer panel
+     */
     private JPanel createTimerPanel() {
         HexPanel timerBox = new HexPanel();
         timerBox.setLayout(new BorderLayout());
@@ -188,6 +213,12 @@ public class GameFrame extends JFrame {
         return panel;
     }
 
+    /**
+     * Creates a standard gameplay control button.
+     *
+     * @param text button label
+     * @return styled button
+     */
     private JButton createControlButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -199,6 +230,11 @@ public class GameFrame extends JFrame {
         return button;
     }
 
+    /**
+     * Creates the circular sound toggle button for gameplay.
+     *
+     * @return styled sound button
+     */
     private JButton createSoundButton() {
         JButton button = new SoundToggleButton();
         button.setBackground(UiTheme.PANEL_BLUE);
@@ -208,6 +244,9 @@ public class GameFrame extends JFrame {
         return button;
     }
 
+    /**
+     * Loads the current question into the labels, buttons, timer, and audio.
+     */
     private void loadQuestion() {
         Question question = gameController.getCurrentQuestion();
         if (question == null) {
@@ -234,6 +273,12 @@ public class GameFrame extends JFrame {
         AudioPlayer.playLoop(gameController.getQuestionLoopFile());
     }
 
+    /**
+     * Submits an answer and starts the feedback animation.
+     *
+     * @param selectedAnswer answer chosen by the player
+     * @param buttonIndex index of the clicked answer button
+     */
     private void checkAnswer(Answer selectedAnswer, int buttonIndex) {
         if (waitingForAnimation || !answerButtons[buttonIndex].isVisible()) {
             return;
@@ -263,6 +308,11 @@ public class GameFrame extends JFrame {
         }
     }
 
+    /**
+     * Handles the end of a correct-answer animation.
+     *
+     * @param result answer result returned by the controller
+     */
     private void finishCorrectAnswer(AnswerResult result) {
         waitingForAnimation = false;
         if (result.isGameFinished()) {
@@ -272,6 +322,9 @@ public class GameFrame extends JFrame {
         }
     }
 
+    /**
+     * Uses the 50/50 lifeline and hides the returned wrong answers.
+     */
     private void execute5050() {
         if (waitingForAnimation) {
             return;
@@ -284,6 +337,15 @@ public class GameFrame extends JFrame {
         helpButton.setEnabled(false);
     }
 
+    /**
+     * Blinks answer buttons and the money ladder to show correct or wrong
+     * feedback.
+     *
+     * @param correctButton button containing the right answer
+     * @param wrongButton button chosen by the player, or {@code null}
+     * @param correctAnswer {@code true} when the player answered correctly
+     * @param afterBlink action to run after the animation finishes
+     */
     private void blinkForResult(MillionaireButton correctButton, MillionaireButton wrongButton, boolean correctAnswer, Runnable afterBlink) {
         long start = System.currentTimeMillis();
         Timer timer = new Timer(250, null);
@@ -315,6 +377,9 @@ public class GameFrame extends JFrame {
         timer.start();
     }
 
+    /**
+     * Toggles audio mute state and restarts the question loop when unmuted.
+     */
     private void toggleMute() {
         AudioPlayer.toggleMuted();
         muteButton.repaint();
@@ -323,12 +388,20 @@ public class GameFrame extends JFrame {
         }
     }
 
+    /**
+     * Enables or disables every answer button together.
+     *
+     * @param enabled new enabled state
+     */
     private void setAnswerButtonsEnabled(boolean enabled) {
         for (MillionaireButton button : answerButtons) {
             button.setEnabled(enabled);
         }
     }
 
+    /**
+     * Shows the win state and saves the final result to the leaderboard.
+     */
     private void showWin() {
         stopCountdownTimer();
         statusLabel.setForeground(UiTheme.GREEN);
@@ -340,6 +413,9 @@ public class GameFrame extends JFrame {
         saveLeaderboard();
     }
 
+    /**
+     * Prompts for a player name and saves the current score.
+     */
     private void saveLeaderboard() {
 
         String name = JOptionPane.showInputDialog(
@@ -363,6 +439,11 @@ public class GameFrame extends JFrame {
         );
     }
 
+    /**
+     * Calculates elapsed play time for leaderboard storage.
+     *
+     * @return elapsed time in {@code mm:ss} format
+     */
     private String getPlayTime() {
 
         long elapsed = System.currentTimeMillis() - startTime;
@@ -375,6 +456,9 @@ public class GameFrame extends JFrame {
         return String.format("%02d:%02d", minutes, seconds);
     }
 
+    /**
+     * Starts a fresh 60-second countdown for the current question.
+     */
     private void resetCountdownTimer() {
         stopCountdownTimer();
         remainingSeconds = 60;
@@ -393,6 +477,9 @@ public class GameFrame extends JFrame {
         countdownTimer.start();
     }
 
+    /**
+     * Stops the active countdown timer if one is running.
+     */
     private void stopCountdownTimer() {
         if (countdownTimer != null) {
             countdownTimer.stop();
@@ -400,11 +487,18 @@ public class GameFrame extends JFrame {
         }
     }
 
+    /**
+     * Updates the timer label text and warning color.
+     */
     private void updateTimerLabel() {
         timerLabel.setText(remainingSeconds + "s");
         timerLabel.setForeground(remainingSeconds <= 10 ? UiTheme.RED : UiTheme.GOLD);
     }
 
+    /**
+     * Treats an expired timer as a wrong answer and returns to the menu after
+     * feedback.
+     */
     private void handleTimeExpired() {
         if (waitingForAnimation) {
             return;
@@ -426,6 +520,9 @@ public class GameFrame extends JFrame {
         });
     }
 
+    /**
+     * Opens a custom confirmation dialog before quitting the current game.
+     */
     private void showExitConfirmation() {
         JDialog dialog = new JDialog(this, "Exit Game", true);
         dialog.setUndecorated(true);
@@ -472,6 +569,9 @@ public class GameFrame extends JFrame {
         dialog.setVisible(true);
     }
 
+    /**
+     * Stops gameplay audio, reopens the main menu, and closes this frame.
+     */
     private void returnToMenu() {
         stopCountdownTimer();
         SwingUtilities.invokeLater(() -> {

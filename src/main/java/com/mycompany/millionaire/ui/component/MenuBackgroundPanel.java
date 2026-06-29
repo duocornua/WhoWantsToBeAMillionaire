@@ -5,10 +5,18 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+/**
+ * Paints the main menu background image so it fills the window.
+ */
 public class MenuBackgroundPanel extends JPanel {
 
     private final Image image = new ImageIcon("MainMenu.png").getImage();
 
+    /**
+     * Draws the menu image using cover scaling.
+     *
+     * @param g graphics context supplied by Swing
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

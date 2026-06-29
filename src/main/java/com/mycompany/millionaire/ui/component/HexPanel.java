@@ -8,12 +8,23 @@ import java.awt.Polygon;
 import java.awt.RenderingHints;
 import javax.swing.JPanel;
 
+/**
+ * Panel with the hexagonal shape used for question and timer boxes.
+ */
 public class HexPanel extends JPanel {
 
+    /**
+     * Creates a transparent hex panel.
+     */
     public HexPanel() {
         setOpaque(false);
     }
 
+    /**
+     * Paints the hexagonal gradient panel and its border.
+     *
+     * @param g graphics context supplied by Swing
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -28,6 +39,14 @@ public class HexPanel extends JPanel {
         g2.dispose();
     }
 
+    /**
+     * Creates a six-point polygon with left and right notches.
+     *
+     * @param width available width
+     * @param height available height
+     * @param notch size of each side notch
+     * @return polygon representing the hex shape
+     */
     public static Polygon createHexShape(int width, int height, int notch) {
         return new Polygon(
                 new int[]{notch, width - notch, width, width - notch, notch, 0},

@@ -8,8 +8,14 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.JButton;
 
+/**
+ * Circular icon button that shows muted or unmuted audio state.
+ */
 public class SoundToggleButton extends JButton {
 
+    /**
+     * Creates a transparent sound toggle button.
+     */
     public SoundToggleButton() {
         setPreferredSize(new Dimension(48, 48));
         setContentAreaFilled(false);
@@ -17,6 +23,11 @@ public class SoundToggleButton extends JButton {
         setFocusPainted(false);
     }
 
+    /**
+     * Paints the sound icon based on {@link AudioPlayer#isMuted()}.
+     *
+     * @param g graphics context supplied by Swing
+     */
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
@@ -58,6 +69,11 @@ public class SoundToggleButton extends JButton {
         g2.dispose();
     }
 
+    /**
+     * Skips default border painting because the icon draws its own outline.
+     *
+     * @param g graphics context supplied by Swing
+     */
     @Override
     protected void paintBorder(Graphics g) {
     }

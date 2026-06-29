@@ -4,8 +4,16 @@ import com.mycompany.millionaire.dsa.QuestionPool;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Contains the built-in question data and builds randomized game sets.
+ */
 public class QuestionBank {
 
+    /**
+     * Creates one complete 15-question game set.
+     *
+     * @return questions ordered by Easy, Medium, Hard, and Extra Hard levels
+     */
     public static ArrayList<Question> getQuestions() {
         QuestionPool pool = createQuestionPool();
         ArrayList<Question> gameQuestions = new ArrayList<>();
@@ -16,6 +24,11 @@ public class QuestionBank {
         return gameQuestions;
     }
 
+    /**
+     * Creates and fills the question pool by difficulty.
+     *
+     * @return populated question pool
+     */
     private static QuestionPool createQuestionPool() {
         QuestionPool pool = new QuestionPool();
         addQuestions(pool, QuestionLevel.EASY, easyQuestions());
@@ -25,12 +38,24 @@ public class QuestionBank {
         return pool;
     }
 
+    /**
+     * Adds a list of questions to one difficulty level.
+     *
+     * @param pool destination question pool
+     * @param level difficulty level for all questions in the list
+     * @param questions questions to add
+     */
     private static void addQuestions(QuestionPool pool, QuestionLevel level, List<Question> questions) {
         for (Question question : questions) {
             pool.add(level, question);
         }
     }
 
+    /**
+     * Builds the easy question list used for levels 1 through 5.
+     *
+     * @return easy questions
+     */
     private static List<Question> easyQuestions() {
         ArrayList<Question> list = new ArrayList<>();
         // "Question", "CORRECT ANSWER", "Incorrect Answer 1", "Incorrect Answer 2", "Incorrect Answer 3"
@@ -42,7 +67,7 @@ public class QuestionBank {
         list.add(new Question("Which language is used for Android development?", "Java", "Python", "C#", "Swift"));
         list.add(new Question("What is 5 + 3?", "8", "6", "7", "9"));
         list.add(new Question("Which ocean is the largest?", "Pacific", "Atlantic", "Indian", "Arctic"));
-        
+
         list.add(new Question("How many oceans are there in the world?", "5", "3", "4", "6"));
         list.add(new Question("Which of the following rays has the highest penetrating power?", "Gamma rays", "Infrared rays", "X-rays", "Violet rays"));
         list.add(new Question("How many stars are there on the national flag of the United States?", "50", "48", "52", "51"));
@@ -51,6 +76,11 @@ public class QuestionBank {
         return list;
     }
 
+    /**
+     * Builds the medium question list used for levels 6 through 10.
+     *
+     * @return medium questions
+     */
     private static List<Question> mediumQuestions() {
         ArrayList<Question> list = new ArrayList<>();
         list.add(new Question("Who wrote Romeo and Juliet?", "William Shakespeare", "Charles Dickens", "Mark Twain", "Jane Austen"));
@@ -70,6 +100,11 @@ public class QuestionBank {
         return list;
     }
 
+    /**
+     * Builds the hard question list used for levels 11 through 14.
+     *
+     * @return hard questions
+     */
     private static List<Question> hardQuestions() {
         ArrayList<Question> list = new ArrayList<>();
         list.add(new Question("Which scientist proposed the theory of general relativity?", "Albert Einstein", "Isaac Newton", "Niels Bohr", "Galileo Galilei"));
@@ -80,7 +115,7 @@ public class QuestionBank {
         list.add(new Question("In computing, what does CPU stand for?", "Central Processing Unit", "Computer Power Utility", "Core Program Unit", "Control Process User"));
         list.add(new Question("Which novel begins with the line 'Call me Ishmael'?", "Moby-Dick", "The Great Gatsby", "Dracula", "The Odyssey"));
         list.add(new Question("Which country has the city of Kyoto?", "Japan", "China", "South Korea", "Thailand"));
-        
+
         list.add(new Question("The largest pagoda ever built is currently located in which country?", "Vietnam", "India", "China", "Thailand"));
         list.add(new Question("In the novel 'Don Quixote' by Miguel de Cervantes, what does the main character mistake for giants?", "Windmills", "Castles", "Flocks of sheep", "Inns"));
         list.add(new Question("What was the name of the first programmable, electronic, general-purpose digital computer, completed in 1945?", "ENIAC", "UNIVAC", "EDVAC", "Colossus"));
@@ -89,13 +124,18 @@ public class QuestionBank {
         return list;
     }
 
+    /**
+     * Builds the extra hard question list used for level 15.
+     *
+     * @return extra hard questions
+     */
     private static List<Question> extraHardQuestions() {
         ArrayList<Question> list = new ArrayList<>();
         list.add(new Question("Which mathematician is associated with the incompleteness theorems?", "Kurt Godel", "Alan Turing", "John von Neumann", "David Hilbert"));
         list.add(new Question("What is the SI base unit of luminous intensity?", "Candela", "Lux", "Lumen", "Tesla"));
         list.add(new Question("Which ancient library was famously located in Egypt?", "Library of Alexandria", "Library of Pergamum", "Library of Nineveh", "Library of Celsus"));
         list.add(new Question("Which protocol is primarily used to translate domain names into IP addresses?", "DNS", "FTP", "SMTP", "SSH"));
-        
+
         list.add(new Question("Which of the following is the world's largest island located within a lake?", "Manitoulin Island", "Samosir", "Rene-Levasseur Island", "Ometepe"));
         list.add(new Question("As of 2020, which song by the late musician Michael Jackson has the highest number of views?", "Billie Jean", "Beat It", "Smooth Criminal", "Thriller"));
         list.add(new Question("In the famous Google Chrome offline dinosaur game, what obstacle appears only after the player scores over 400 points?", "Pterodactyls", "Low cacti", "Tall cacti", "Double cacti"));
