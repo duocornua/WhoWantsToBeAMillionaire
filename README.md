@@ -25,6 +25,17 @@
 
 The player answers 15 multiple-choice questions and climbs a money ladder from `$100` to `$1,000,000`. Each question has four answers, only one is correct, and every round has a 60-second timer. Difficulty increases through Easy, Medium, Hard, and Extra Hard question pools.
 
+---
+
+## 📷 Screenshots
+
+| | |
+|---|---|
+| ![1](https://github.com/user-attachments/assets/f037b849-a384-4bf2-ae72-b19228add288) | ![2](https://github.com/user-attachments/assets/7ea8c9ba-b566-497c-8d3a-0fd6017f170f) |
+| ![3](https://github.com/user-attachments/assets/201c9ab9-3abb-4081-a41c-f4c1551ab71b) | ![4](https://github.com/user-attachments/assets/0715c3ce-45c2-4f88-bcb8-903d7a183a2b) |
+
+---
+
 ## Current Features
 
 - Main menu with Play Game, Leaderboard, About, Help, Exit, and audio mute controls.
@@ -36,7 +47,7 @@ The player answers 15 multiple-choice questions and climbs a money ladder from `
 
 ---
 
-## How to Play
+## 🕹️ How to Play
 
 | Action | Result |
 |---|---|
@@ -51,7 +62,7 @@ The player answers 15 multiple-choice questions and climbs a money ladder from `
 
 ---
 
-## Game Rules
+## 📋 Game Rules
 
 - A complete playthrough contains 15 questions.
 - Questions 1-5 are selected from the Easy question list.
