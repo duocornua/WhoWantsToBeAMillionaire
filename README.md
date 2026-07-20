@@ -11,7 +11,7 @@
 
 | Student ID | Full Name | Role |
 |---|---|---|
-| CE200157 | Vương Kiến Hào | Member |
+| CE200157 | Vương Kiến Hào | Leader |
 | CE201342 | Nguyễn Trần Phúc Đăng | Member |
 | CE201357 | Lê Thuận Thành | Member |
 | CE180887 | Nguyễn Thế Vinh | Member |
