@@ -334,7 +334,7 @@ public class MainMenu extends JFrame {
      */
     private JPanel createMembersCard() {
         String[][] members = {
-            {"CE200157", "Vuong Kien Hao", "Member"},
+            {"CE200157", "Vuong Kien Hao", "Leader"},
             {"CE201342", "Nguyen Tran Phuc Dang", "Member"},
             {"CE201357", "Le Thuan Thanh", "Member"},
             {"CE180887", "Nguyen The Vinh", "Member"},
