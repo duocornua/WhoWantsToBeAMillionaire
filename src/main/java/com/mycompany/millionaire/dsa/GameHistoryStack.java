@@ -32,6 +32,23 @@ public class GameHistoryStack {
     }
 
     /**
+     * Counts how many answered rounds were correct.
+     *
+     * @return number of correct answers stored in the history
+     */
+    public int countCorrect() {
+        int correctCount = 0;
+
+        for (GameRound round : answeredRounds) {
+            if (round.isCorrect()) {
+                correctCount++;
+            }
+        }
+
+        return correctCount;
+    }
+
+    /**
      * Checks whether the player has answered any rounds.
      *
      * @return {@code true} when the history has no rounds

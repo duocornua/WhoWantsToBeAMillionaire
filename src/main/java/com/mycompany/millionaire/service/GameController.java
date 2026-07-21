@@ -120,7 +120,7 @@ public class GameController {
      * @return number of answered rounds
      */
     public int getReachedLevel() {
-        return history.size();
+        return history.countCorrect();
     }
 
     /**
@@ -130,7 +130,7 @@ public class GameController {
      */
     public int getCurrentMoney() {
 
-        PrizeLevel prize = moneyLadder.getPrizeLevel(history.size());
+        PrizeLevel prize = moneyLadder.getPrizeLevel(history.countCorrect());
 
         if (prize == null) {
             return 0;
