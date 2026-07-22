@@ -108,11 +108,7 @@ public class LeaderboardEntry implements Comparable<LeaderboardEntry> {
      */
     @Override
     public int compareTo(LeaderboardEntry other) {
-
-        if (this.money != other.money) {
-            return Integer.compare(other.money, this.money);
-        }
-
+        
         if (this.level != other.level) {
             return Integer.compare(other.level, this.level);
         }
